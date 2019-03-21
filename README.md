@@ -13,23 +13,24 @@ Currently supports:
 
 ```bash
 // If you want to use AWS Secrets Manager
-$ npm install secretary-secrets aws-sdk
+$ npm install @secretary/core @secretary/aws-secrets-manager
 
 // If you want to use Hashicorp Vault
-$ npm install secretary-secrets node-vault
+$ npm install @secretary/core @secretary/node-vault
 
-// If you want to use a JSON file (no extra deps needed!)
-$ npm install secretary-secrets
+// If you want to use a JSON file
+$ npm install @secretary/core @secretary/json-file
 ```
 
 ## Usage
 
 ```typescript
-import Secretary, {AWSSecretsManagerAdapter} from 'secretary-secrets';
+import Secretary from '@secretary/core';
+import Adapter from '@secretary/aws-secrets-manager';
 import {SecretsManager} from 'aws-sdk';
 
 const manager = new Secretary({
-    adapter: new AWSSecretsManagerAdapter({client: new SecretsManager()})
+    adapter: new Adapter({client: new SecretsManager()})
 });
 
 async function main() {

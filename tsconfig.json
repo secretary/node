@@ -1,0 +1,41 @@
+{
+    "compileOnSave":   false,
+    "include":         [
+        "src/**/*"
+    ],
+    "exclude":         [
+        "node_modules",
+        "**/*.spec.ts"
+    ],
+    "compilerOptions": {
+        "target":                       "es2017",
+        "module":                       "commonjs",
+        "jsx":                          "preserve",
+        "moduleResolution":             "node",
+        "allowSyntheticDefaultImports": true,
+        "noUnusedLocals":               false,
+        "noUnusedParameters":           true,
+        "removeComments":               false,
+        "preserveConstEnums":           true,
+        "declaration":                  true,
+        "sourceMap":                    true,
+        "skipLibCheck":                 true,
+        "baseUrl":                      ".",
+        "noImplicitAny":                false,
+        "outDir":                       "dist/",
+        "pretty":                       true,
+        "lib":                          [
+            "es2017.object",
+            "es2015",
+            "es2017",
+            "esnext",
+            "dom"
+        ],
+        "typeRoots":                    [
+            "./node_modules/@types"
+        ],
+        "types":                        [
+            "node"
+        ]
+    }
+}

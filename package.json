@@ -1,6 +1,10 @@
 {
     "name": "@secretary/core",
     "description": "Secrets Manager for NodeJS",
+    "repository": {
+        "type": "github",
+        "url": "https://github.com/secretarysecrets/node"
+    },
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {

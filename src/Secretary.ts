@@ -4,7 +4,7 @@ import {
     AdapterInterface,
     GetSecretOptionsInterface,
     OptionsInterface,
-    PathOptionsInterface,
+    PathOptionsInterface, PutMultipleOptionsInterface, PutMultiplePathOptionsInterface,
     PutSingleOptionsInterface,
     PutSinglePathOptionsInterface,
     SecretInterface,
@@ -24,5 +24,9 @@ export default class Secretary<T extends AdapterInterface> {
 
     public async putSecret(options: PutSingleOptionsInterface | PutSinglePathOptionsInterface): Promise<void> {
         return this.adapter.putSecret(options);
+    }
+
+    public async putSecrets(options: PutMultipleOptionsInterface | PutMultiplePathOptionsInterface): Promise<void> {
+        return this.adapter.putSecrets(options);
     }
 }

@@ -48,6 +48,19 @@ describe('src/Secretary.ts', () => {
         await getPathSecret(manager, 'key', 'path', 'baz');
     });
 
+    it('should throw an error if the path adapter is given a bad path', async () => {
+        const manager = getManager(getMemoryPathAdapter());
+
+        let error;
+        try {
+            await manager.getSecret({key: 'test', path: '/test/'});
+        } catch (e) {
+            error = e;
+            expect(e.message).to.contain('Path is invalid. Must match regex: ');
+        }
+        expect(error).to.be.not.equal(undefined);
+    });
+
     it('should be able fetch a group of secret from a path adapter', async () => {
         const secrets: Secret[] = [
             {key: 'key', path: 'path', value: 'baz'},
@@ -84,5 +97,26 @@ describe('src/Secretary.ts', () => {
             {key: 'foo', value: 'bar'},
             {key: 'foo', value: 'baz'},
         ]);
+    });
+
+    it('should be able to add a secret', async () => {
+        const adapter = getMemoryAdapter();
+        const manager = getManager(adapter);
+
+        expect(await manager.getSecrets({key: 'test'})).to.have.length(0);
+        await manager.putSecret({key: 'test', value: 'foobar'});
+        expect(await manager.getSecrets({key: 'test'})).to.have.length(1);
+        expect(await manager.getSecret({key: 'test'})).to.deep.equal({key: 'test', value: 'foobar'});
+    });
+
+    it('should be able to add multiple secrets', async () => {
+        const adapter = getMemoryAdapter();
+        const manager = getManager(adapter);
+        const secrets = [{key: 'test', value: 'foobar'}, {key: 'test', value: 'foobar2'}];
+
+        expect(await manager.getSecrets({key: 'test'})).to.have.length(0);
+        await manager.putSecrets({secrets});
+        expect(await manager.getSecrets({key: 'test'})).to.have.length(2);
+        expect(await manager.getSecrets({key: 'test'})).to.deep.equal(secrets);
     });
 });

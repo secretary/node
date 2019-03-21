@@ -1,16 +1,17 @@
-export {AWSCredstashAdapter, AWSCredstashConfiguration} from './Adapter/AWS/Credstash';
-export {AWSSecretsManagerAdapter, AWSSecretsManagerConfiguration} from './Adapter/AWS/SecretsManager';
-export {GenericJSONFileAdapter, GenericJSONFileConfiguration} from './Adapter/Generic/JSONFile';
-export {HashicorpVaultAdapter, HashicorpVaultConfiguration} from './Adapter/Hashicorp/Vault';
+export {AbstractAdapter, AbstractPathAdapter} from './Adapter';
 export {
-    AbstractAdapter,
-    Result,
-    PathResult,
-    AbstractContextAdapter,
-    AbstractPathAdapter,
+    AdapterInterface,
     ConfigurationInterface,
-    Context,
-    ContextAdapterInterface,
+    GetSecretOptionsInterface,
+    KeyOptionsInterface,
+    OptionsInterface,
     PathAdapterInterface,
-} from './Adapter';
+    PathOptionsInterface,
+    PutMultipleOptionsInterface,
+    PutMultiplePathOptionsInterface,
+    PutSingleOptionsInterface,
+    PutSinglePathOptionsInterface,
+    SecretInterface,
+    SecretWithPathInterface,
+} from './Interface';
 export {default as Secretary} from './Secretary';

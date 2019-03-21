@@ -1,23 +1,37 @@
 import * as LRUCache from 'lru-cache';
 
-import {ConfigurationInterface} from './';
+import {
+    AdapterInterface,
+    ConfigurationInterface,
+    GetSecretOptionsInterface,
+    OptionsInterface, PutMultipleOptionsInterface,
+    PutSingleOptionsInterface,
+    SecretInterface,
+} from '../Interface';
 
-export type Result = string;
-export interface PathResult {
-    [key: string]: string;
-}
+type MemoizeType = SecretInterface | SecretInterface[];
 
-export default abstract class AbstractAdapter {
+export default abstract class AbstractAdapter implements AdapterInterface {
     protected cache?: LRUCache<string, any>;
 
     protected constructor(protected readonly config: ConfigurationInterface) {
-        if (this.shouldCache()) {
+        if (this.config.cache) {
             const {enabled, ...cacheOptions} = this.config.cache;
-            this.cache                       = new LRUCache<string, any>(cacheOptions);
+            if (enabled) {
+                this.cache = new LRUCache<string, any>(cacheOptions);
+            }
         }
     }
 
-    protected async memoize<T extends PathResult | Result>(key: string, callback: () => Promise<T>): Promise<T> {
+    public abstract getSecret(options: GetSecretOptionsInterface): Promise<SecretInterface>;
+
+    public abstract getSecrets(options: OptionsInterface): Promise<SecretInterface[]>;
+
+    public abstract putSecret(options: PutSingleOptionsInterface): Promise<void>;
+
+    public abstract putSecrets(options: PutMultipleOptionsInterface): Promise<void>;
+
+    protected async memoize<T extends MemoizeType>(key: string, callback: () => Promise<T>): Promise<T> {
         if (this.shouldCache() && this.cache.has(key)) {
             return this.cache.get(key);
         }
@@ -30,7 +44,7 @@ export default abstract class AbstractAdapter {
         return cachedValue;
     }
 
-    private shouldCache(): boolean {
+    protected shouldCache(): boolean {
         return this.config.cache && this.config.cache.enabled;
     }
 }

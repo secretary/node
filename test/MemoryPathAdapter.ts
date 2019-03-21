@@ -1,25 +1,27 @@
-import {AbstractPathAdapter, PathResult} from '../src/Adapter';
+import {
+    AbstractPathAdapter,
+    PathOptionsInterface,
+    PutMultiplePathOptionsInterface,
+    PutSinglePathOptionsInterface,
+    SecretWithPathInterface,
+} from '../src';
 
 export default class MemoryPathAdapter extends AbstractPathAdapter {
-    public constructor(private readonly secrets: PathResult) {
+    public constructor(private readonly secrets: SecretWithPathInterface[]) {
         super({cache: {enabled: true}});
     }
 
-    public async getPath(path: string): Promise<PathResult> {
-        const resolved             = this.resolve(path);
-        const response: PathResult = {};
-        for (const key of Object.keys(resolved)) {
-            if (typeof resolved[key] !== 'object') {
-                response[key] = resolved[key];
-            }
-        }
+    public async getSecrets(options: PathOptionsInterface): Promise<SecretWithPathInterface[]> {
+        this.denyIfInvalidPath(options.path);
 
-        return response;
+        return this.secrets.filter((secret) => secret.path === options.path);
     }
 
-    private resolve(path: string): any {
-        const properties = Array.isArray(path) ? path : path.split('/');
+    public async putSecret(options: PutSinglePathOptionsInterface): Promise<void> {
+        this.secrets.push(options);
+    }
 
-        return properties.reduce((prev, curr) => prev && prev[curr], this.secrets as any);
+    public async putSecrets(options: PutMultiplePathOptionsInterface): Promise<void> {
+        this.secrets.push(...options.secrets);
     }
 }

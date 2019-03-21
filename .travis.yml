@@ -1,23 +1,26 @@
 language: node_js
-
 node_js:
-    - "10"
+    - 11
+    - 10
+    - 9
 
 sudo: false
-if: tag IS blank
-
-branches:
-    only:
-        - master
-
 install:
     - npm i
 
-script:
-    - npm run test
-    - npm run lint
-    - npm run build
+stages:
+    -   name: test
+        if: branch = master AND tag IS blank
+    -   name: release
+        if: branch = master AND tag IS blank
 
-after_success:
-    - npm i -g semantic-release@15 @semantic-release/npm @semantic-release/changelog @semantic-release/git @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator
-    - npx semantic-release
+script: npm run lint && npm run test && if [[ "$(node -v)" = v10.* ]]; then npm run coverage; fi
+
+jobs:
+    include:
+        -   stage: release
+            node_js: 10
+            script: |
+                npm run build
+                npm i -g semantic-release@15 @semantic-release/npm @semantic-release/changelog @semantic-release/git @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator
+                npx semantic-release

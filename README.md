@@ -4,7 +4,7 @@
 
 ___
 
-Secretary (etymology: Keeper of secrets) provides an abstract way to manage (currently only retrieve) secrets.
+Secretary (etymology: Keeper of secrets) provides an abstract way to manage secrets.
 
 Currently supports the following adapters:
 

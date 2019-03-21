@@ -9,7 +9,7 @@ Secretary (etymology: Keeper of secrets) provides an abstract way to manage (cur
 Currently supports the following adapters:
 
 * [AWS Secrets Manager](https://github.com/secretarysecrets/node-aws-secrets-manager)
-* [AWS Credstash](https://github.com/secretarysecrets/node-aws-credstash)
+* [Credstash](https://github.com/secretarysecrets/node-credstash)
 * [Hashicorp Vault](https://github.com/secretarysecrets/node-hashicorp-vault)
 * [JSON File](https://github.com/secretarysecrets/node-json-file)
 

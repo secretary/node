@@ -21,10 +21,9 @@ $ npm install @secretary/core @secretary/aws-secrets-manager
 
 // If you want to use Hashicorp Vault
 $ npm install @secretary/core @secretary/node-vault
-
-// If you want to use a JSON file
-$ npm install @secretary/core @secretary/json-file
 ```
+
+Check the install docs of the adapter you want to use for specific instructions.
 
 ## Usage
 
@@ -43,3 +42,5 @@ async function main() {
     console.log(someSecret); // redis://localhost:6379
 }
 ```
+
+Check the usage docs of the adapter you want to use for specific instructions.

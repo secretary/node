@@ -1,4 +1,5 @@
 import 'source-map-support/register';
+
 import {AbstractContextAdapter, AbstractPathAdapter, Context, PathResult, Result} from './Adapter';
 
 export default class Secretary<T extends AbstractPathAdapter | AbstractContextAdapter> {

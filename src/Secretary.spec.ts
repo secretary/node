@@ -25,9 +25,11 @@ describe('src/Secretary.ts', () => {
     });
 
     it('should be able fetch a single secret from a path adapter', async () => {
-        const adapter = getMemoryPathAdapter({path: {key: 'baz'}});
+        const adapter = getMemoryPathAdapter({path: {key: 'baz', key2: 'bar'}});
         const manager = getManager(adapter);
 
+        expect(await manager.getSecret('key', 'path')).to.equal('baz');
+        expect(await manager.getSecret('key2', 'path')).to.equal('bar');
         expect(await manager.getSecret('key', 'path')).to.equal('baz');
     });
 

@@ -2,7 +2,7 @@ import {AbstractPathAdapter, PathResult} from '../src/Adapter';
 
 export default class MemoryPathAdapter extends AbstractPathAdapter {
     public constructor(private readonly secrets: PathResult) {
-        super({});
+        super({cache: {enabled: true}});
     }
 
     public async getPath(path: string): Promise<PathResult> {

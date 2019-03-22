@@ -6,6 +6,7 @@ node_js:
 
 sudo: false
 install:
+    - npm i -g lerna
     - npm i
 
 stages:
@@ -14,12 +15,12 @@ stages:
     -   name: release
         if: branch = master AND tag IS blank
 
-script: npm run lint && npm run test && if [[ "$(node -v)" = v10.* ]]; then npm run coverage; fi
+script: lerna run lint && lerna run test && if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
 
 jobs:
     include:
         -   stage: release
             node_js: 10
             script: |
-                npm run build
-                npx lerna publish
+                lerna run build
+                lerna publish

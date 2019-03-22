@@ -1,48 +1,39 @@
 {
-    "name": "@secretary/core",
+    "name": "@secretary/secretary",
     "description": "Secrets Manager for NodeJS",
     "repository": {
         "type": "github",
         "url": "https://github.com/secretarysecrets/node"
     },
-    "main": "index.js",
-    "types": "index.d.ts",
-    "scripts": {
-        "build": "tsc --project tsconfig.json",
-        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
-        "test": "nyc mocha",
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
-        "prepublishOnly": "rm -r src && mv dist/* . && rmdir dist"
-    },
-    "nyc": {
-        "extension": [
-            ".ts"
-        ],
-        "include": [
-            "src/**/*.ts"
-        ],
-        "exclude": [
-            "src/**/*.spec.ts"
-        ],
-        "reporter": [
-            "text"
-        ],
-        "all": true
-    },
     "author": "Aaron Scherer <aequasi@gmail.com>",
     "license": "MIT",
+    "dependencies": {
+        "@secretary/aws-secrets-manager": "file:packages/aws-secrets-manager-adapter",
+        "@secretary/core": "file:packages/core",
+        "@secretary/credstash": "file:packages/credstash-adapter",
+        "@secretary/json-file": "file:packages/json-file-adapter",
+        "@secretary/vault": "file:packages/hashicorp-vault-adapter"
+    },
     "devDependencies": {
+        "@secretary/core": "^1.0.1",
         "@types/assert": "^1.4.2",
         "@types/chai": "^4.1.7",
         "@types/lru-cache": "^5.1.0",
         "@types/mocha": "^5.2.6",
         "@types/node": "^11.11.4",
+        "@types/node-vault": "^0.5.3",
+        "@types/nodecredstash": "^2.0.0",
         "@types/sinon": "^7.0.10",
         "@types/sinon-chai": "^3.2.2",
         "@types/source-map-support": "^0.5.0",
         "assert": "^1.4.1",
+        "aws-sdk": "^2.426.0",
+        "aws-sdk-mock": "^4.3.1",
         "chai": "^4.2.0",
+        "lerna": "^3.13.1",
         "mocha": "^6.0.2",
+        "node-vault": "^0.9.6",
+        "nodecredstash": "^2.0.2",
         "nyc": "^13.3.0",
         "sinon": "^7.3.0",
         "sinon-chai": "^3.3.0",
@@ -50,26 +41,5 @@
         "ts-sinon": "^1.0.17",
         "tslint": "^5.14.0",
         "typescript": "^3.3.4000"
-    },
-    "dependencies": {
-        "lru-cache": "^5.1.1",
-        "source-map-support": "^0.5.11"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "release": {
-        "plugins": [
-            "@semantic-release/commit-analyzer",
-            "@semantic-release/release-notes-generator",
-            [
-                "@semantic-release/changelog",
-                {
-                    "changelogFile": "CHANGELOG.md"
-                }
-            ],
-            "@semantic-release/git",
-            "@semantic-release/npm"
-        ]
     }
 }

@@ -1,0 +1,58 @@
+{
+    "name": "@secretary/vault",
+    "description": "Hashicorp Vault adapter for Secretary",
+    "repository": {
+        "type": "github",
+        "url": "https://github.com/secretarysecrets/node-vault"
+    },
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
+        "test": "nyc mocha",
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
+        "prepublishOnly": "rm -r src && mv dist/* . && rmdir dist"
+    },
+    "nyc": {
+        "extension": [
+            ".ts"
+        ],
+        "include": [
+            "src/**/*.ts"
+        ],
+        "exclude": [
+            "src/**/*.spec.ts"
+        ],
+        "reporter": [
+            "text"
+        ],
+        "all": true
+    },
+    "author": "Aaron Scherer <aequasi@gmail.com>",
+    "license": "MIT",
+    "peerDependencies": {
+        "node-vault": "^0.9.6"
+    },
+    "dependencies": {
+        "lru-cache": "^5.1.1",
+        "source-map-support": "^0.5.11"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "release": {
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator",
+            [
+                "@semantic-release/changelog",
+                {
+                    "changelogFile": "CHANGELOG.md"
+                }
+            ],
+            "@semantic-release/git",
+            "@semantic-release/npm"
+        ]
+    }
+}

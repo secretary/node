@@ -1,5 +1,4 @@
-dist
 node_modules
-.env
-Adapters
-.nyc_output
+*.log
+.idea
+.vscode

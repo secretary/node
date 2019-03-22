@@ -22,5 +22,4 @@ jobs:
             node_js: 10
             script: |
                 npm run build
-                npm i -g semantic-release@15 @semantic-release/npm @semantic-release/changelog @semantic-release/git @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator
-                npx semantic-release
+                npx lerna publish

@@ -1,6 +1,3 @@
 tsconfig.json
 tslint.json
-CHANGELOG.md
 test
-.travis.yml
-src

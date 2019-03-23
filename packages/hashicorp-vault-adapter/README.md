@@ -1,6 +1,4 @@
 # Secretary - Hashicorp Vault Adapter
-[![Build Status](https://travis-ci.org/secretarysecrets/node-vault.svg?branch=master)](https://travis-ci.org/secretarysecrets/node-vault)
-[![codecov](https://codecov.io/gh/secretarysecrets/node-vault/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node-vault)
 
 ____
 

@@ -1,6 +1,4 @@
 # Secretary - AWS Secrets Manager Adapter
-[![Build Status](https://travis-ci.org/secretarysecrets/node-aws-secrets-manager.svg?branch=master)](https://travis-ci.org/secretarysecrets/node-aws-secrets-manager)
-[![codecov](https://codecov.io/gh/secretarysecrets/node-aws-secrets-manager/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node-aws-secrets-manager)
 
 ___
 

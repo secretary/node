@@ -1,12 +1,10 @@
 # Secretary - JSON File Adapter
-[![Build Status](https://travis-ci.org/secretarysecrets/node-json-file.svg?branch=master)](https://travis-ci.org/secretarysecrets/node-json-file)
-[![codecov](https://codecov.io/gh/secretarysecrets/node-json-file/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node-json-file)
 
 ____
 
 This is the JSON File adapter for [Secretary](https://github.com/secretarysecrets/node)
 
-## Important
+### Important
 
 This adapter does NOT use any encryption. It should ***NOT*** be used in production.
 

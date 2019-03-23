@@ -1,6 +1,4 @@
 # Secretary - Credstash Adapter
-[![Build Status](https://travis-ci.org/secretarysecrets/node-credstash.svg?branch=master)](https://travis-ci.org/secretarysecrets/node-credstash)
-[![codecov](https://codecov.io/gh/secretarysecrets/node-credstash/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node-credstash)
 
 ____
 

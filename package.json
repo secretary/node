@@ -2,6 +2,7 @@
     "name": "@secretary/node",
     "description": "Secretary Monorepo for NodeJS",
     "author": "Aaron Scherer <aequasi@gmail.com>",
+    "private": true,
     "scripts": {
         "core": "lerna run build --scope=@secretary/core",
         "prepare": "npm run core",

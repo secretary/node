@@ -4,8 +4,11 @@
         "prepare": "npm run core"
     },
     "dependencies": {
+        "@secretary/aws-secrets-manager": "file:packages/aws-secrets-manager-adapter",
         "@secretary/core": "file:packages/core",
-        "@secretary/json-file": "file:packages/json-file-adapter"
+        "@secretary/credstash": "file:packages/credstash-adapter",
+        "@secretary/json-file": "file:packages/json-file-adapter",
+        "@secretary/vault": "file:packages/hashicorp-vault-adapter"
     },
     "devDependencies": {
         "@secretary/core": "file:../core",

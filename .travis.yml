@@ -6,12 +6,11 @@ sudo: false
 install:
     - npm ci
     - lerna bootstrap
-    - lerna run build
 
 if: branch = master AND tag IS blank
 
-script: |
-    lerna run lint
-    lerna run test
-    if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
-    lerna publish
+script:
+    - lerna run --parallel build
+    - lerna run --parallel lint
+    - lerna run --parallel test
+    - lerna run coverage

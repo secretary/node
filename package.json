@@ -1,7 +1,11 @@
 {
     "scripts": {
         "core": "lerna run build --scope=@secretary/core",
-        "prepare": "npm run core"
+        "prepare": "npm run core",
+        "lint": "lerna run --parallel lint",
+        "test": "lerna run --parallel test",
+        "build": "lerna run --parallel build",
+        "prepublishOnly": "npm run lint && npm run test && npm run build"
     },
     "dependencies": {
         "@secretary/aws-secrets-manager": "file:packages/aws-secrets-manager-adapter",

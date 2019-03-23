@@ -12,7 +12,8 @@
         "build": "tsc --project tsconfig.json",
         "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
         "test": "nyc mocha",
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
+        "prepublishOnly": "npm run build"
     },
     "nyc": {
         "extension": [

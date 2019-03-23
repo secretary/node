@@ -1,4 +1,4 @@
 tsconfig.json
 tslint.json
 test
-.nyc_output
+src

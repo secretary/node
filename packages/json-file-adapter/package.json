@@ -32,6 +32,6 @@
     "author": "Aaron Scherer <aequasi@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@secretary/core": "^1.0.0"
+        "@secretary/core": "file:../core"
     }
 }

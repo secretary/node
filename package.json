@@ -1,4 +1,6 @@
 {
+    "name": "@secretary/node",
+    "description": "Secretary Monorepo for NodeJS",
     "scripts": {
         "core": "lerna run build --scope=@secretary/core",
         "prepare": "npm run core",
@@ -41,6 +43,5 @@
         "ts-sinon": "^1.0.17",
         "tslint": "^5.14.0",
         "typescript": "^3.3.4000"
-    },
-    "name": "secretary"
+    }
 }

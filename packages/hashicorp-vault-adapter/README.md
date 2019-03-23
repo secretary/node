@@ -12,8 +12,7 @@ $ npm install @secretary/core @secretary/vault
 
 ### Creating the manager
 ```typescript
-import Secretary from '@secretary/core';
-import Adapter from '@secretary/vault';
+import {Adapter, Secretary} from '@secretary/vault';
 import * as nodeVault from 'node-vault';
 
 const manager = new Secretary(new Adapter({client: nodeVault()}));

@@ -1,2 +1,4 @@
-export {default as AWSCredstashAdapter} from './Adapter';
-export {default as AWSCredstashConfiguration} from './Configuration';
+export {default as Secretary} from '@secretary/core';
+
+export {default as Adapter} from './Adapter';
+export {default as Configuration} from './Configuration';

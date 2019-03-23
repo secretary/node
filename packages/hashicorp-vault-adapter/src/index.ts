@@ -1,2 +1,4 @@
-export {default as HashicorpVaultAdapter} from './Adapter';
-export {default as HashicorpVaultConfiguration} from './Configuration';
+export {default as Secretary} from '@secretary/core';
+
+export {default as Adapter} from './Adapter';
+export {default as Configuration} from './Configuration';

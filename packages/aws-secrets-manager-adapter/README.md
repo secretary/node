@@ -12,8 +12,7 @@ $ npm install @secretary/core @secretary/aws-secrets-manager
 
 ### Creating the manager
 ```typescript
-import Secretary from '@secretary/core';
-import Adapter from '@secretary/aws-secrets-manager';
+import {Adapter, Secretary} from '@secretary/aws-secrets-manager';
 import {SecretsManager} from 'aws-sdk';
 
 const manager = new Secretary(new Adapter({client: new SecretsManager({region: 'us-east-1'})}));

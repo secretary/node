@@ -16,8 +16,7 @@ $ npm install @secretary/core @secretary/json-file
 
 ### Creating the manager
 ```typescript
-import Secretary from '@secretary/core';
-import Adapter from '@secretary/json-file';
+import {Adapter, Secretary} from '@secretary/json-file';
 
 const manager = new Secretary(new Adapter({file: '../path/to/my/secrets'}));
 ```

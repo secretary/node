@@ -12,8 +12,7 @@ $ npm install @secretary/core @secretary/credstash
 
 ### Creating the manager
 ```typescript
-import Secretary from '@secretary/core';
-import Adapter from '@secretary/credstash';
+import {Adapter, Secretary} from '@secretary/credstash';
 import Credstash from 'nodecredstash';
 
 const manager = new Secretary(new Adapter({client: new Credstash()}));

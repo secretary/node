@@ -1,4 +1,4 @@
-export {default as Secretary} from '@secretary/core';
+export {Secretary} from '@secretary/core';
 
 export {default as Adapter} from './Adapter';
 export {default as Configuration} from './Configuration';

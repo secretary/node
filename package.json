@@ -1,12 +1,14 @@
 {
+    "scripts": {
+        "core": "lerna run build --scope=@secretary/core",
+        "prepare": "npm run core"
+    },
     "dependencies": {
-        "@secretary/aws-secrets-manager": "file:packages/aws-secrets-manager-adapter",
         "@secretary/core": "file:packages/core",
-        "@secretary/credstash": "file:packages/credstash-adapter",
-        "@secretary/json-file": "file:packages/json-file-adapter",
-        "@secretary/vault": "file:packages/hashicorp-vault-adapter"
+        "@secretary/json-file": "file:packages/json-file-adapter"
     },
     "devDependencies": {
+        "@secretary/core": "file:../core",
         "@types/assert": "^1.4.2",
         "@types/chai": "^4.1.7",
         "@types/lru-cache": "^5.1.0",
@@ -32,5 +34,6 @@
         "ts-sinon": "^1.0.17",
         "tslint": "^5.14.0",
         "typescript": "^3.3.4000"
-    }
+    },
+    "name": "secretary"
 }

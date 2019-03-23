@@ -35,6 +35,6 @@
         "aws-sdk": "^2.425.0"
     },
     "dependencies": {
-        "@secretary/core": "^1.0.0"
+        "@secretary/core": "file:../core"
     }
 }

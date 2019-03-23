@@ -1,37 +1,43 @@
 {
-    "name":        "@secretary/json-file",
+    "name": "@secretary/json-file",
     "description": "JSON File adapter for Secretary",
-    "version":     "1.0.0",
-    "repository":  {
+    "version": "1.0.0",
+    "repository": {
         "type": "github",
-        "url":  "https://github.com/secretarysecrets/node-json-file"
+        "url": "https://github.com/secretarysecrets/node-json-file"
     },
-    "main":        "dist/index.js",
-    "typings":       "dist/index.d.ts",
-    "scripts":     {
-        "build":          "tsc --project tsconfig.json",
-        "lint":           "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
-        "test":           "nyc mocha",
-        "coverage":       "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc --project tsconfig.json",
+        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
+        "test": "nyc mocha",
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
     },
-    "nyc":         {
+    "nyc": {
         "extension": [
             ".ts"
         ],
-        "include":   [
+        "include": [
             "src/**/*.ts"
         ],
-        "exclude":   [
+        "exclude": [
             "src/**/*.spec.ts"
         ],
-        "reporter":  [
+        "reporter": [
             "text"
         ],
-        "all":       true
+        "all": true
     },
-    "author":      "Aaron Scherer <aequasi@gmail.com>",
-    "license":     "MIT",
-    "dependencies": {
+    "author": "Aaron Scherer <aequasi@gmail.com>",
+    "license": "MIT",
+    "peerDependencies": {
         "@secretary/core": "^1.0.0"
+    },
+    "devDependencies": {
+        "mocha": "^6.0.2",
+        "nyc": "^13.3.0",
+        "tslint": "^5.14.0",
+        "typescript": "^3.3.4000"
     }
 }

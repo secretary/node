@@ -8,8 +8,8 @@ sudo: false
 install:
     - npm i -g lerna
     - npm i
-    - lerna run build
     - lerna bootstrap
+    - lerna run build
 
 stages:
     -   name: test
@@ -17,7 +17,10 @@ stages:
     -   name: release
         if: branch = master AND tag IS blank
 
-script: lerna run lint && lerna run test && if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
+script: |
+    lerna run lint
+    lerna run test
+    if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
 
 jobs:
     include:

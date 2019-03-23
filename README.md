@@ -8,10 +8,10 @@ Secretary (etymology: Keeper of secrets) provides an abstract way to manage secr
 
 Currently supports the following adapters:
 
-* [AWS Secrets Manager](https://github.com/secretarysecrets/node-aws-secrets-manager)
-* [Credstash](https://github.com/secretarysecrets/node-credstash)
-* [Hashicorp Vault](https://github.com/secretarysecrets/node-hashicorp-vault)
-* [JSON File](https://github.com/secretarysecrets/node-json-file)
+* [AWS Secrets Manager](https://github.com/secretary/node/tree/master/packages/aws-secrets-manager-adapter)
+* [Credstash](https://github.com/secretary/node/tree/master/packages/credstash-adapter)
+* [Hashicorp Vault](https://github.com/secretary/node/tree/master/packages/hashicorp-vault-adater)
+* [JSON File](https://github.com/secretary/node/tree/master/packages/json-file-adapter)
 
 ## Installation 
 
@@ -20,7 +20,7 @@ Currently supports the following adapters:
 $ npm install @secretary/core @secretary/aws-secrets-manager
 
 // If you want to use Hashicorp Vault
-$ npm install @secretary/core @secretary/node-vault
+$ npm install @secretary/core @secretary/vault
 ```
 
 Check the install docs of the adapter you want to use for specific instructions.

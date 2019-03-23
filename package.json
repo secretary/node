@@ -11,7 +11,7 @@
         "@secretary/vault": "file:packages/hashicorp-vault-adapter"
     },
     "devDependencies": {
-        "@secretary/core": "file:../core",
+        "@secretary/core": "file:packages/core",
         "@types/assert": "^1.4.2",
         "@types/chai": "^4.1.7",
         "@types/lru-cache": "^5.1.0",

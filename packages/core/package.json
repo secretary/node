@@ -35,5 +35,6 @@
     "dependencies": {
         "lru-cache": "^5.1.1",
         "source-map-support": "^0.5.11"
-    }
+    },
+    "gitHead": "1d2ccec2bb581e52094ad21595c8a50cf9fac90c"
 }

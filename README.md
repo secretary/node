@@ -39,8 +39,8 @@ const manager = new Secretary({
 });
 
 async function main() {
-    const someSecret = await manager.getSecret('redis_host', 'some/secret/path');
-    
+    const someSecret = await manager.getSecret({key: 'host', path: 'database/redis/main'});
+
     console.log(someSecret); // redis://localhost:6379
 }
 ```

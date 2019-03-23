@@ -10,7 +10,7 @@ install:
 if: branch = master AND tag IS blank
 
 script:
-    - lerna run --parallel build
     - lerna run --parallel lint
+    - lerna run --parallel build
     - lerna run --parallel test
-    - lerna run coverage
+    - lerna run --parallel coverage

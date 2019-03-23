@@ -1,8 +1,6 @@
 language: node_js
 node_js:
-    - 11
     - 10
-    - 9
 
 sudo: false
 install:
@@ -10,20 +8,10 @@ install:
     - lerna bootstrap
     - lerna run build
 
-stages:
-    -   name: test
-        if: branch = master AND tag IS blank
-    -   name: release
-        if: branch = master AND tag IS blank
+if: branch = master AND tag IS blank
 
 script: |
     lerna run lint
     lerna run test
     if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
-
-jobs:
-    include:
-        -   stage: release
-            node_js: 10
-            script: |
-                lerna publish
+    lerna publish

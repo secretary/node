@@ -1,7 +1,5 @@
 # Secretary - JSON File Adapter
 
-____
-
 This is the JSON File adapter for [Secretary](https://github.com/secretarysecrets/node)
 
 ### Important

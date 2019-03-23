@@ -1,7 +1,5 @@
 # Secretary - Credstash Adapter
 
-____
-
 This is the [Credstash](https://github.com/DavidTanner/nodecredstash) adapter for [Secretary](https://github.com/secretarysecrets/node)
 
 ## Installation 

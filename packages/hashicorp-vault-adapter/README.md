@@ -1,7 +1,5 @@
 # Secretary - Hashicorp Vault Adapter
 
-____
-
 This is the [Hashicorp Vault](https://www.vaultproject.io/) adapter for [Secretary](https://github.com/secretarysecrets/node)
 
 ## Installation 

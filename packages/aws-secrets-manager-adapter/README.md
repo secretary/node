@@ -1,7 +1,5 @@
 # Secretary - AWS Secrets Manager Adapter
 
-___
-
 This is the [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) adapter for [Secretary](https://github.com/secretarysecrets/node)
 
 ## Installation 

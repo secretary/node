@@ -1,7 +1,7 @@
 {
     "name": "@secretary/credstash",
     "description": "Credstash adapter for Secretary",
-    "version": "1.0.1-alpha.1",
+    "version": "1.0.1-alpha.2",
     "repository": {
         "type": "github",
         "url": "https://github.com/secretarysecrets/node-credstash"
@@ -35,7 +35,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@secretary/core": "^1.0.1-alpha.1"
+        "@secretary/core": "^1.0.1-alpha.2"
     },
     "peerDependencies": {
         "nodecredstash": "^2.0.2"

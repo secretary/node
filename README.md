@@ -28,8 +28,10 @@ Check the install docs of the adapter you want to use for specific instructions.
 ## Usage
 
 ```typescript
-import Secretary from '@secretary/core';
-import Adapter from '@secretary/aws-secrets-manager';
+import {Adapter, Secretary} from '@secretary/aws-secrets-manager';
+// Or: import {Adapter, Secretary} from '@secretary/vault';
+// Or: import {Adapter, Secretary} from '@secretary/credstash';
+// Or: import {Adapter, Secretary} from '@secretary/json-file';
 import {SecretsManager} from 'aws-sdk';
 
 const manager = new Secretary({

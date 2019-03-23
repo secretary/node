@@ -16,7 +16,7 @@ stages:
     -   name: release
         if: branch = master AND tag IS blank
 
-script: lerna run lint && lerna run test && if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
+script: lerna run lint && lerna run build && lerna run test && if [[ "$(node -v)" = v10.* ]]; then lerna run coverage; fi
 
 jobs:
     include:

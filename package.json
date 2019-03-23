@@ -1,12 +1,4 @@
 {
-    "name": "@secretary/secretary",
-    "description": "Secrets Manager for NodeJS",
-    "repository": {
-        "type": "github",
-        "url": "https://github.com/secretarysecrets/node"
-    },
-    "author": "Aaron Scherer <aequasi@gmail.com>",
-    "license": "MIT",
     "dependencies": {
         "@secretary/aws-secrets-manager": "file:packages/aws-secrets-manager-adapter",
         "@secretary/core": "file:packages/core",
@@ -15,7 +7,6 @@
         "@secretary/vault": "file:packages/hashicorp-vault-adapter"
     },
     "devDependencies": {
-        "@secretary/core": "^1.0.1",
         "@types/assert": "^1.4.2",
         "@types/chai": "^4.1.7",
         "@types/lru-cache": "^5.1.0",

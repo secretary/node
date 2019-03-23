@@ -1,55 +1,37 @@
 {
-    "name": "@secretary/json-file",
+    "name":        "@secretary/json-file",
     "description": "JSON File adapter for Secretary",
-    "repository": {
+    "version":     "1.0.0",
+    "repository":  {
         "type": "github",
-        "url": "https://github.com/secretarysecrets/node-json-file"
+        "url":  "https://github.com/secretarysecrets/node-json-file"
     },
-    "main": "index.js",
-    "types": "index.d.ts",
-    "scripts": {
-        "build": "tsc --project tsconfig.json",
-        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
-        "test": "nyc mocha",
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
-        "prepublishOnly": "rm -r src && mv dist/* . && rmdir dist"
+    "main":        "dist/index.js",
+    "typings":       "dist/index.d.ts",
+    "scripts":     {
+        "build":          "tsc --project tsconfig.json",
+        "lint":           "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
+        "test":           "nyc mocha",
+        "coverage":       "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
     },
-    "nyc": {
+    "nyc":         {
         "extension": [
             ".ts"
         ],
-        "include": [
+        "include":   [
             "src/**/*.ts"
         ],
-        "exclude": [
+        "exclude":   [
             "src/**/*.spec.ts"
         ],
-        "reporter": [
+        "reporter":  [
             "text"
         ],
-        "all": true
+        "all":       true
     },
-    "author": "Aaron Scherer <aequasi@gmail.com>",
-    "license": "MIT",
+    "author":      "Aaron Scherer <aequasi@gmail.com>",
+    "license":     "MIT",
     "dependencies": {
-        "lru-cache": "^5.1.1",
-        "source-map-support": "^0.5.11"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "release": {
-        "plugins": [
-            "@semantic-release/commit-analyzer",
-            "@semantic-release/release-notes-generator",
-            [
-                "@semantic-release/changelog",
-                {
-                    "changelogFile": "CHANGELOG.md"
-                }
-            ],
-            "@semantic-release/git",
-            "@semantic-release/npm"
-        ]
+        "@secretary/core": "^1.0.0"
     }
 }

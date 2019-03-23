@@ -1,18 +1,19 @@
 {
     "name": "@secretary/core",
     "description": "Secrets Manager for NodeJS",
+    "version": "1.0.0",
     "repository": {
         "type": "github",
         "url": "https://github.com/secretarysecrets/node"
     },
-    "main": "index.js",
-    "types": "index.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc --project tsconfig.json",
         "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
         "test": "nyc mocha",
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
-        "prepublishOnly": "rm -r src && mv dist/* . && rmdir dist"
+        "prepare": "npm run build",
+        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
     },
     "nyc": {
         "extension": [
@@ -34,22 +35,5 @@
     "dependencies": {
         "lru-cache": "^5.1.1",
         "source-map-support": "^0.5.11"
-    },
-    "publishConfig": {
-        "access": "public"
-    },
-    "release": {
-        "plugins": [
-            "@semantic-release/commit-analyzer",
-            "@semantic-release/release-notes-generator",
-            [
-                "@semantic-release/changelog",
-                {
-                    "changelogFile": "CHANGELOG.md"
-                }
-            ],
-            "@semantic-release/git",
-            "@semantic-release/npm"
-        ]
     }
 }

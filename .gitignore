@@ -1,7 +1,7 @@
 node_modules
-package-lock.json
 *.log
 .idea
 .vscode
-packages/*/package-lock.json
 packages/*/dist
+packages/*/node_modules
+packages/*/.nyc_output

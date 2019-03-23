@@ -31,7 +31,7 @@
     },
     "author": "Aaron Scherer <aequasi@gmail.com>",
     "license": "MIT",
-    "peerDependencies": {
+    "dependencies": {
         "@secretary/core": "^1.0.0"
     }
 }

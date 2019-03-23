@@ -31,10 +31,10 @@
     },
     "author": "Aaron Scherer <aequasi@gmail.com>",
     "license": "MIT",
+    "dependencies": {
+        "@secretary/core": "^1.0.0"
+    },
     "peerDependencies": {
         "aws-sdk": "^2.425.0"
-    },
-    "dependencies": {
-        "@secretary/core": "file:../core"
     }
 }

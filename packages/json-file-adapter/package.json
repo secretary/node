@@ -1,7 +1,7 @@
 {
     "name": "@secretary/json-file",
     "description": "JSON File adapter for Secretary",
-    "version": "1.0.1-alpha.0",
+    "version": "1.0.1-alpha.1",
     "repository": {
         "type": "github",
         "url": "https://github.com/secretarysecrets/node-json-file"
@@ -35,7 +35,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@secretary/core": "^1.0.1-alpha.0"
+        "@secretary/core": "^1.0.1-alpha.1"
     },
     "gitHead": "8a63a6c74c7141a4a6d0d28bb3ce0c45ca0a9398"
 }

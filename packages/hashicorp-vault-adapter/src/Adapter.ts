@@ -55,11 +55,11 @@ export default class Adapter extends AbstractPathAdapter {
         } catch (_) {
         }
 
-        existingSecrets.push(options);
         const data: { [key: string]: string } = {};
         for (const secret of existingSecrets) {
             data[secret.key] = secret.value;
         }
+        data[options.key] = options.value;
 
         await this.client.write(`${this.secretPath}/${options.path}`, data);
 

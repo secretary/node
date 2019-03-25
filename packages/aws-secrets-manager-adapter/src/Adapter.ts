@@ -59,10 +59,11 @@ export default class Adapter extends AbstractPathAdapter {
 
             await this.client.createSecret(opts);
         } else {
-            const newValue: any = {[key]: value};
+            const newValue: any = {};
             for (const secret of existingSecret) {
                 newValue[secret.key] = secret.value;
             }
+            newValue[key] = value;
 
             const opts: UpdateSecretRequest = {SecretId: path};
             if (requestOptions.Description) {

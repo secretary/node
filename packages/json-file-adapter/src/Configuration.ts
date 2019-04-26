@@ -1,6 +1,4 @@
-import {ConfigurationInterface} from '@secretary/core';
-
-export default interface Configuration extends ConfigurationInterface {
+export default interface Configuration {
     /** Specifies the location of the JSON file */
     file: string;
 }

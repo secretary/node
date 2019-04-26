@@ -8,9 +8,7 @@ import Adapter from './Adapter';
 
 use(sinonChai);
 
-const getAdapter: any = () => {
-    return new Adapter({versionId: 'a', versionStage: 'b', client: new AWS.SecretsManager({})});
-};
+const getAdapter: any = () => new Adapter(new AWS.SecretsManager({}));
 
 describe('src/Secretary.ts', () => {
     it('should be able to construct', () => {

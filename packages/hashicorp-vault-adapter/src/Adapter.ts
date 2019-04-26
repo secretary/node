@@ -1,88 +1,65 @@
-import {
-    AbstractPathAdapter,
-    PathOptionsInterface,
-    PutMultiplePathOptionsInterface,
-    PutSinglePathOptionsInterface,
-    SecretWithPathInterface,
-} from '@secretary/core';
+import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError} from '@secretary/core';
 import * as nodeVault from 'node-vault';
 
 import Configuration, {AppRoleOptions} from './Configuration';
 
-export default class Adapter extends AbstractPathAdapter {
+export default class Adapter extends AbstractAdapter {
     private client: nodeVault.client;
-
-    private loggedIn: boolean = false;
 
     private readonly appRole?: AppRoleOptions;
 
     private readonly secretPath: string;
 
-    public constructor(protected readonly config: Configuration) {
-        super(config);
+    public constructor(config: Configuration) {
+        super();
 
         const {appRole, secretPath} = config;
         this.client                 = config.client;
         this.appRole                = appRole;
-        if (!appRole) {
-            this.loggedIn = true;
-        }
 
         this.secretPath = secretPath || 'secret';
     }
 
-    public async getSecrets(options: PathOptionsInterface): Promise<SecretWithPathInterface[]> {
-        return this.memoize<SecretWithPathInterface[]>(JSON.stringify(options), async () => {
-            await this.logIn();
+    public async getSecret(key: string, options?: OptionsInterface): Promise<Secret> {
+        await this.logIn();
 
-            const result = await this.client.read(`${this.secretPath}/${options.path}`);
+        try {
+            const result              = await this.client.read(`${this.secretPath}/${key}`, options);
+            const {data, ...metadata} = result;
 
-            return Object.entries(result.data).map(([key, value]) => {
-                return {
-                    key,
-                    value: value as string,
-                    path:  options.path,
-                };
-            });
-        });
+            return new Secret(key, data, metadata);
+        } catch (e) {
+            throw new SecretNotFoundError(key);
+        }
     }
 
-    public async putSecret(options: PutSinglePathOptionsInterface): Promise<void> {
+    public async putSecret(secret: Secret, options?: OptionsInterface): Promise<Secret> {
         await this.logIn();
-        let existingSecrets: SecretWithPathInterface[] = [];
+
+        const newData: any = typeof secret.value !== 'string' ? JSON.stringify(secret.value) : secret.value;
+
+        const result              = await this.client.write(`${this.secretPath}/${secret.key}`, newData, options);
+        const {data, ...metadata} = result;
+
+        return secret.withMetadata(metadata);
+    }
+
+    public async deleteSecret(secret: Secret, options?: OptionsInterface): Promise<void> {
+        await this.logIn();
+
         try {
-            existingSecrets = await this.getSecrets({path: options.path});
-        } catch (_) {
-        }
-
-        const data: { [key: string]: string } = {};
-        for (const secret of existingSecrets) {
-            data[secret.key] = secret.value;
-        }
-        data[options.key] = options.value;
-
-        await this.client.write(`${this.secretPath}/${options.path}`, data);
-
-        if (this.shouldCache()) {
-            this.cache.reset();
+            await this.client.delete(`${this.secretPath}/${secret.key}`, options);
+        } catch (e) {
+            throw new SecretNotFoundError(secret.key);
         }
     }
 
     /**
-     * @todo Optimize to only run as many requests are needed
-     * @param options
+     * @todo Only login when necessary
      */
-    public async putSecrets(options: PutMultiplePathOptionsInterface): Promise<void> {
-        for (const secret of options.secrets) {
-            await this.putSecret(secret);
-        }
-    }
-
     private async logIn(): Promise<void> {
-        if (!this.loggedIn && this.appRole) {
+        if (this.appRole) {
             await this.client.approleLogin(this.appRole);
         }
-
-        this.loggedIn = true;
     }
 }

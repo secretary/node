@@ -1,96 +1,55 @@
-import {AbstractPathAdapter, PathOptionsInterface, SecretWithPathInterface} from '@secretary/core';
+import {AdapterInterface, OptionsInterface, Secret} from '@secretary/core';
 import {SecretsManager} from 'aws-sdk';
 import {CreateSecretRequest, UpdateSecretRequest} from 'aws-sdk/clients/secretsmanager';
 
-import Configuration from './Configuration';
-import {PutMultipleOptionsInterface, PutSingleOptionsInterface} from './PutOptionsInterface';
-
-export default class Adapter extends AbstractPathAdapter {
-    private readonly client: SecretsManager;
-
-    public constructor(protected readonly config: Configuration) {
-        super(config);
-
-        this.client = config.client;
+export default class Adapter implements AdapterInterface {
+    public constructor(private readonly client: SecretsManager) {
     }
 
-    public getSecrets(options: PathOptionsInterface): Promise<SecretWithPathInterface[]> {
-        return this.memoize<SecretWithPathInterface[]>(JSON.stringify(options), async () => {
-            const params: SecretsManager.GetSecretValueRequest = {SecretId: options.path};
-            if (this.config.versionId) {
-                params.VersionId = this.config.versionId;
-            }
-            if (this.config.versionStage) {
-                params.VersionStage = this.config.versionStage;
-            }
+    public async getSecret(key: string, options: OptionsInterface): Promise<Secret> {
+        const params: SecretsManager.GetSecretValueRequest = {SecretId: options.path};
+        if (options.versionId) {
+            params.VersionId = options.versionId;
+        }
+        if (options.versionStage) {
+            params.VersionStage = options.versionStage;
+        }
 
-            const data = await this.client.getSecretValue(params).promise();
+        const data                        = await this.client.getSecretValue(params).promise();
+        const {SecretString, ...metadata} = data;
 
-            const secrets: { [key: string]: string } = JSON.parse(data['SecretString']);
-
-            return Object.entries(secrets).map<SecretWithPathInterface>(([key, value]) => {
-                return {key, value, path: options.path};
-            });
-        });
-    }
-
-    public async putSecret(options: PutSingleOptionsInterface): Promise<void> {
-        const {key, value, path, ...requestOptions} = options;
-
-        let existingSecret: SecretWithPathInterface[];
-        let newSecret = false;
+        const secret: Secret = new Secret(key, '', metadata);
         try {
-            existingSecret = await this.getSecrets({path});
+            return secret.withValue(JSON.parse(data['SecretString']));
         } catch (e) {
-            newSecret = true;
-        }
-
-        if (newSecret) {
-            const opts: CreateSecretRequest = {Name: path, SecretString: JSON.stringify({[key]: value})};
-            if (requestOptions.Description) {
-                opts.Description = requestOptions.Description;
-            }
-            if (requestOptions.Tags) {
-                opts.Tags = requestOptions.Tags;
-            }
-            if (requestOptions.KmsKeyId) {
-                opts.KmsKeyId = requestOptions.KmsKeyId;
-            }
-
-            await this.client.createSecret(opts);
-        } else {
-            const newValue: any = {};
-            for (const secret of existingSecret) {
-                newValue[secret.key] = secret.value;
-            }
-            newValue[key] = value;
-
-            const opts: UpdateSecretRequest = {SecretId: path};
-            if (requestOptions.Description) {
-                opts.Description = requestOptions.Description;
-            }
-            if (requestOptions.KmsKeyId) {
-                opts.KmsKeyId = requestOptions.KmsKeyId;
-            }
-
-            opts.SecretString = JSON.stringify(newValue);
-
-            await this.client.updateSecret(opts);
-        }
-
-        if (this.shouldCache()) {
-            this.cache.reset();
+            return secret.withValue(data['SecretString']);
         }
     }
 
-    /**
-     * @todo Write this to do as few requests as possible (Lump up paths together)
-     * @param options
-     */
-    public async putSecrets(options: PutMultipleOptionsInterface): Promise<void> {
-        const {secrets, ...restOptions} = options;
-        for (const secret of secrets) {
-            await this.putSecret({...restOptions, ...secret});
+    public async putSecret(secret: Secret, options: OptionsInterface): Promise<Secret> {
+        options.SecretString = typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value);
+
+        try {
+            options.SecretId = secret.key;
+            const {Tags, ...params} = options;
+
+            let response = await this.client.updateSecret(params as UpdateSecretRequest).promise();
+            if (Tags !== undefined) {
+                const tagResponse = await this.client.tagResource({SecretId: secret.key, Tags}).promise();
+                response = {...response, ...tagResponse};
+            }
+
+            return secret.withMetadata(response);
+        } catch (e) {
+            options.Name = secret.key;
+
+            const response = await this.client.createSecret(options as CreateSecretRequest).promise();
+
+            return secret.withMetadata(response);
         }
+    }
+
+    public async deleteSecret(secret: Secret, options: OptionsInterface): Promise<void> {
+        await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
     }
 }

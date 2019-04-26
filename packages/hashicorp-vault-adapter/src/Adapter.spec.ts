@@ -1,141 +1,92 @@
-import {expect, use} from 'chai';
+import {AdapterTest} from '@secretary/core';
+import {use} from 'chai';
 import 'mocha';
 import * as nodeVault from 'node-vault';
-import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
+import * as TypeMoq from 'typemoq';
 
 import Adapter from './Adapter';
 
 use(sinonChai);
 
-const vault: nodeVault.client = nodeVault();
+const mock = TypeMoq.Mock.ofInstance(nodeVault(), TypeMoq.MockBehavior.Strict);
 
-const getAdapter: any = () => {
-    return new Adapter({client: vault});
+const getAdapter = () => {
+    return new Adapter({client: mock.object});
 };
 
-describe('src/Secretary.ts', () => {
-    it('should be able to construct', () => {
-        expect(getAdapter()).to.be.instanceOf(Adapter);
-    });
+afterEach(() => mock.verifyAll());
 
-    it('should log in', async () => {
-        const client = nodeVault();
-        const adapter = new Adapter({
-            client,
-            appRole: {role_id: 'a', secret_id: 'b'},
-        });
+AdapterTest(
+    'src/Adapter.ts',
+    getAdapter,
+    {
+        constructor:  (_) => {
+            mock.reset();
+        },
+        getSecret:    (_: Adapter, expected: any[]) => {
+            mock.reset();
+            mock
+                .setup((x) => x.read(TypeMoq.It.isValue('secret/' + expected[0][0]), TypeMoq.It.isAny()))
+                .returns(() => Promise.resolve({data: expected[0][1].value}));
 
-        const stub = sinon.stub(client, 'approleLogin');
-        const readStub = sinon.stub(client, 'read');
-        readStub.returns(Promise.resolve({data: {}}));
+            mock
+                .setup((x) => x.read(TypeMoq.It.isValue('secret/' + expected[1][0]), TypeMoq.It.isAny()))
+                .returns(() => Promise.resolve({data: expected[1][1].value}));
 
-        await adapter.getSecret({key: 'key', path: 'path'});
-        expect(readStub).to.have.been.calledOnceWith('secret/path');
-        expect(stub).to.have.been.calledOnceWith({role_id: 'a', secret_id: 'b'});
-    });
+            mock
+                .setup((x) => x.read(TypeMoq.It.isValue('secret/' + expected[2][0]), TypeMoq.It.isAny()))
+                .returns(() => Promise.reject());
 
-    it('should be able fetch a single secret from the adapter', async () => {
-        let read = sinon.stub(vault, 'read');
+        },
+        putSecret:    (_: Adapter, expected: any[]) => {
+            mock.reset();
+            mock
+                .setup((x) => x.write(
+                    TypeMoq.It.isValue('secret/' + expected[0][0].key),
+                    TypeMoq.It.isValue(expected[0][0].value),
+                    TypeMoq.It.isAny(),
+                ))
+                .returns(() => Promise.resolve({data: expected[0][0].value}));
 
-        read.returns(Promise.resolve({data: {key: 'baz', key2: 'bar'}}));
+            mock
+                .setup((x) => x.write(
+                    TypeMoq.It.isValue('secret/' + expected[1][0].key),
+                    TypeMoq.It.isValue(expected[1][0].value),
+                    TypeMoq.It.isAny(),
+                ))
+                .returns(() => Promise.resolve({data: expected[1][0].value}));
 
-        const adapter = getAdapter();
+            mock
+                .setup((x) => x.write(
+                    TypeMoq.It.isValue('secret/' + expected[1][0].key),
+                    TypeMoq.It.isValue(expected[1][1]),
+                    TypeMoq.It.isAny(),
+                ))
+                .returns(() => Promise.resolve({data: expected[1][1]}));
+        },
+        deleteSecret: (_adapter: Adapter, expected: any[]) => {
+            mock.reset();
 
-        expect(await adapter.getSecret({key: 'key', path: 'path'})).to.deep.equal({
-            key: 'key', path: 'path', value: 'baz',
-        });
-        expect(read).to.have.been.calledOnceWith('secret/path');
+            mock
+                .setup((x) => x.write(
+                    TypeMoq.It.isValue('secret/' + expected[0][0].key),
+                    TypeMoq.It.isValue(expected[0][0].value),
+                    TypeMoq.It.isAny(),
+                ))
+                .returns(() => Promise.resolve({data: expected[0][0].value}));
 
-        read.restore();
-        read = sinon.stub(vault, 'read');
-        read.returns(Promise.resolve({data: {key: 'baz', key2: 'bar'}}));
+            mock
+                .setup((x) => x.delete(TypeMoq.It.isValue('secret/' + expected[0][0].key), TypeMoq.It.isAny()))
+                .verifiable(TypeMoq.Times.exactly(2));
 
-        expect(await adapter.getSecret({key: 'key2', path: 'path'})).to.deep.equal({
-            key: 'key2', path: 'path', value: 'bar',
-        });
-        expect(read).to.have.been.calledOnceWith('secret/path');
-
-        read.restore();
-    });
-
-    it('should be able fetch a group of secret from the adapter', async () => {
-        const read = sinon.stub(vault, 'read');
-
-        read.returns(Promise.resolve({data: {key: 'baz', key2: 'bar'}}));
-
-        const adapter = getAdapter();
-
-        expect(await adapter.getSecrets({path: 'path'})).to.deep.equal([
-            {key: 'key', path: 'path', value: 'baz'},
-            {key: 'key2', path: 'path', value: 'bar'},
-        ]);
-        expect(read).to.have.been.calledOnceWith('secret/path');
-
-        read.restore();
-    });
-
-    it('should be able to add a secret', async () => {
-        const read  = sinon.stub(vault, 'read');
-        const write = sinon.stub(vault, 'write');
-
-        read.returns(Promise.reject());
-
-        const adapter = getAdapter();
-
-        await adapter.putSecret({path: 'path', key: 'key', value: 'baz'});
-        expect(read).to.have.been.calledOnceWith('secret/path');
-        expect(write).to.have.been.calledOnceWith('secret/path', {key: 'baz'});
-
-        read.restore();
-        write.restore();
-    });
-
-    it('should be able to update a secret', async () => {
-        const read  = sinon.stub(vault, 'read');
-        const write = sinon.stub(vault, 'write');
-
-        read.returns(Promise.resolve({data: {key: 'baz'}}));
-
-        const adapter = getAdapter();
-
-        await adapter.putSecret({path: 'path', key: 'key2', value: 'bar'});
-        expect(read).to.have.been.calledOnceWith('secret/path');
-        expect(write).to.have.been.calledOnceWith('secret/path', {key: 'baz', key2: 'bar'});
-
-        read.restore();
-        write.restore();
-    });
-
-    it('should be able to add multiple secrets', async () => {
-        const read  = sinon.stub(vault, 'read');
-        const write = sinon.stub(vault, 'write');
-
-        read.returns(Promise.reject());
-
-        const adapter = getAdapter();
-
-        await adapter.putSecrets({secrets: [{path: 'path', key: 'key', value: 'baz'}]});
-        expect(read).to.have.been.calledOnceWith('secret/path');
-        expect(write).to.have.been.calledOnceWith('secret/path', {key: 'baz'});
-
-        read.restore();
-        write.restore();
-    });
-
-    it('should be able to update multiple secrets', async () => {
-        const read  = sinon.stub(vault, 'read');
-        const write = sinon.stub(vault, 'write');
-
-        read.returns(Promise.resolve({data: {key: 'baz'}}));
-
-        const adapter = getAdapter();
-
-        await adapter.putSecrets({secrets: [{path: 'path', key: 'key2', value: 'bar'}]});
-        expect(read).to.have.been.calledOnceWith('secret/path');
-        expect(write).to.have.been.calledOnceWith('secret/path', {key: 'baz', key2: 'bar'});
-
-        read.restore();
-        write.restore();
-    });
-});
+            mock
+                .setup((x) => x.read(TypeMoq.It.isValue('secret/' + expected[0][0].key), TypeMoq.It.isAny()))
+                .returns(() => Promise.reject());
+            mock
+                .setup((x) => x.delete(TypeMoq.It.isValue('secret/' + expected[0][0].key), TypeMoq.It.isAny()))
+                .returns(() => Promise.reject())
+                .verifiable(TypeMoq.Times.exactly(2));
+        },
+    },
+);

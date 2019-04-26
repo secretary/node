@@ -1,10 +1,4 @@
-import {
-    AbstractPathAdapter,
-    PathOptionsInterface,
-    PutMultiplePathOptionsInterface,
-    PutSinglePathOptionsInterface,
-    SecretWithPathInterface,
-} from '@secretary/core';
+import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from '@secretary/core';
 import {readFile, writeFile} from 'fs';
 
 import Configuration from './Configuration';
@@ -13,83 +7,78 @@ interface Secrets {
     [key: string]: string | Secrets;
 }
 
-export default class Adapter extends AbstractPathAdapter {
+export default class Adapter extends AbstractAdapter {
     private static updateValue(
         key: string,
-        path: string,
-        value: string,
-        secrets: SecretWithPathInterface[],
-    ): SecretWithPathInterface[] {
-        const oldSecret = secrets.find((s) => s.key === key && s.path === path);
-        if (oldSecret) {
-            oldSecret.value = value;
+        value: SecretValueType,
+        secrets: Secret[],
+    ): Secret[] {
+        const index = secrets.findIndex((s) => s.key === key);
+        if (index >= 0) {
+            secrets[index] = secrets[index].withValue(value);
         } else {
-            secrets.push({key, path, value});
+            secrets.push(new Secret(key, value));
         }
 
         return secrets;
     }
 
     public constructor(protected readonly config: Configuration) {
-        super(config);
+        super();
     }
 
-    public async getSecrets(options: PathOptionsInterface): Promise<SecretWithPathInterface[]> {
-        return this.memoize<SecretWithPathInterface[]>(JSON.stringify(options), async () => {
-            const secrets = await this.loadSecrets();
+    public async getSecret(key: string, _options?: OptionsInterface): Promise<Secret> {
+        const secrets = await this.loadSecrets();
 
-            return secrets.filter((secret) => secret.path === options.path);
-        });
-    }
-
-    public async putSecret(options: PutSinglePathOptionsInterface): Promise<void> {
-        return new Promise(async (resolve, reject) => {
-            const secrets = Adapter.updateValue(options.key, options.path, options.value, await this.loadSecrets());
-
-            writeFile(this.config.file, Buffer.from(JSON.stringify(secrets, null, 4)), (err) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                if (this.shouldCache()) {
-                    this.cache.reset();
-                }
-
-                resolve();
-            });
-        });
-    }
-
-    public async putSecrets(options: PutMultiplePathOptionsInterface): Promise<void> {
-        let secrets = await this.loadSecrets();
-        for (const secret of options.secrets) {
-            secrets = Adapter.updateValue(secret.key, secret.path, secret.value, secrets);
+        const secret = secrets.find((s) => s.key === key);
+        if (!secret) {
+            throw new SecretNotFoundError(key);
         }
 
-        return new Promise(async (resolve, reject) => {
-            writeFile(this.config.file, Buffer.from(JSON.stringify(secrets, null, 4)), (err) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                if (this.shouldCache()) {
-                    this.cache.reset();
-                }
-
-                resolve();
-            });
-        });
+        return secret;
     }
 
-    private async loadSecrets(): Promise<SecretWithPathInterface[]> {
+    public async putSecret(secret: Secret, _options?: OptionsInterface): Promise<Secret> {
+        const secrets = Adapter.updateValue(secret.key, secret.value, await this.loadSecrets());
+
+        await this.saveSecrets(secrets);
+
+        return secret;
+    }
+
+    public async deleteSecret(secret: Secret, _options?: OptionsInterface): Promise<void> {
+        const secrets = await this.loadSecrets();
+
+        const index = secrets.findIndex((s) => s.key === secret.key);
+        if (index === -1) {
+            throw new SecretNotFoundError(secret.key);
+        }
+        secrets.splice(index, 1);
+
+        await this.saveSecrets(secrets);
+    }
+
+    private async loadSecrets(): Promise<Secret[]> {
         return new Promise((resolve, reject) => {
             readFile(this.config.file, (err, buffer) => {
                 if (err) {
                     return reject(err);
                 }
 
-                resolve(JSON.parse(buffer.toString('utf8')));
+                const secrets = JSON.parse(buffer.toString('utf8'));
+
+                resolve(secrets.map((s) => new Secret(s._key, s._value, s._metadata)));
             });
+        });
+    }
+
+    private async saveSecrets(secrets: Secret[]): Promise<void> {
+        return new Promise((resolve, reject) => {
+            writeFile(
+                this.config.file,
+                Buffer.from(JSON.stringify(secrets, null, 4)),
+                (err) => err ? reject(err) : resolve(),
+            );
         });
     }
 }

@@ -1,13 +1,14 @@
-import {AdapterInterface, OptionsInterface, Secret} from '@secretary/core';
+import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError} from '@secretary/core';
 import {SecretsManager} from 'aws-sdk';
 import {CreateSecretRequest, UpdateSecretRequest} from 'aws-sdk/clients/secretsmanager';
 
-export default class Adapter implements AdapterInterface {
+export default class Adapter extends AbstractAdapter {
     public constructor(private readonly client: SecretsManager) {
+        super();
     }
 
-    public async getSecret(key: string, options: OptionsInterface): Promise<Secret> {
-        const params: SecretsManager.GetSecretValueRequest = {SecretId: options.path};
+    public async getSecret(key: string, options: OptionsInterface = {}): Promise<Secret> {
+        const params: SecretsManager.GetSecretValueRequest = {SecretId: key};
         if (options.versionId) {
             params.VersionId = options.versionId;
         }
@@ -15,18 +16,22 @@ export default class Adapter implements AdapterInterface {
             params.VersionStage = options.versionStage;
         }
 
-        const data                        = await this.client.getSecretValue(params).promise();
-        const {SecretString, ...metadata} = data;
-
-        const secret: Secret = new Secret(key, '', metadata);
         try {
-            return secret.withValue(JSON.parse(data['SecretString']));
+            const data                        = await this.client.getSecretValue(params).promise();
+            const {SecretString, ...metadata} = data;
+
+            const secret: Secret = new Secret(key, '', metadata as any);
+            try {
+                return secret.withValue(JSON.parse(SecretString));
+            } catch (e) {
+                return secret.withValue(SecretString);
+            }
         } catch (e) {
-            return secret.withValue(data['SecretString']);
+            throw new SecretNotFoundError(key);
         }
     }
 
-    public async putSecret(secret: Secret, options: OptionsInterface): Promise<Secret> {
+    public async putSecret(secret: Secret, options: OptionsInterface = {}): Promise<Secret> {
         options.SecretString = typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value);
 
         try {
@@ -42,6 +47,7 @@ export default class Adapter implements AdapterInterface {
             return secret.withMetadata(response);
         } catch (e) {
             options.Name = secret.key;
+            delete options.SecretId;
 
             const response = await this.client.createSecret(options as CreateSecretRequest).promise();
 
@@ -49,7 +55,12 @@ export default class Adapter implements AdapterInterface {
         }
     }
 
-    public async deleteSecret(secret: Secret, options: OptionsInterface): Promise<void> {
-        await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
+    public async deleteSecret(secret: Secret, options: OptionsInterface = {}): Promise<void> {
+        try {
+            await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
+        } catch (e) {
+            console.error(e);
+            throw new SecretNotFoundError(secret.key);
+        }
     }
 }

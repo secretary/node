@@ -1,6 +1,6 @@
 /* tslint:disable:interface-over-type-literal */
 export type SecretValueType = string | { [key: string]: string };
-export type MetadataType = { [key: string]: string };
+export type MetadataType = { [key: string]: any };
 
 export default class Secret {
     public constructor(private _key: string, private _value: SecretValueType, private _metadata: MetadataType = {}) {

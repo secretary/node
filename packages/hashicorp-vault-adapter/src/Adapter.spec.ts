@@ -15,6 +15,7 @@ const getAdapter = () => {
     return new Adapter({client: mock.object});
 };
 
+beforeEach(() => mock.reset());
 afterEach(() => mock.verifyAll());
 
 AdapterTest(
@@ -22,10 +23,8 @@ AdapterTest(
     getAdapter,
     {
         constructor:  (_) => {
-            mock.reset();
         },
         getSecret:    (_: Adapter, expected: any[]) => {
-            mock.reset();
             mock
                 .setup((x) => x.read(TypeMoq.It.isValue('secret/' + expected[0][0]), TypeMoq.It.isAny()))
                 .returns(() => Promise.resolve({data: expected[0][1].value}));
@@ -40,7 +39,6 @@ AdapterTest(
 
         },
         putSecret:    (_: Adapter, expected: any[]) => {
-            mock.reset();
             mock
                 .setup((x) => x.write(
                     TypeMoq.It.isValue('secret/' + expected[0][0].key),
@@ -66,8 +64,6 @@ AdapterTest(
                 .returns(() => Promise.resolve({data: expected[1][1]}));
         },
         deleteSecret: (_adapter: Adapter, expected: any[]) => {
-            mock.reset();
-
             mock
                 .setup((x) => x.write(
                     TypeMoq.It.isValue('secret/' + expected[0][0].key),
@@ -83,6 +79,7 @@ AdapterTest(
             mock
                 .setup((x) => x.read(TypeMoq.It.isValue('secret/' + expected[0][0].key), TypeMoq.It.isAny()))
                 .returns(() => Promise.reject());
+
             mock
                 .setup((x) => x.delete(TypeMoq.It.isValue('secret/' + expected[0][0].key), TypeMoq.It.isAny()))
                 .returns(() => Promise.reject())

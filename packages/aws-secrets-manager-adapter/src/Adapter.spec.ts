@@ -1,146 +1,94 @@
+import {AdapterTest} from '@secretary/core';
 import * as AWS from 'aws-sdk';
-import * as AWSMock from 'aws-sdk-mock';
-import {expect, use} from 'chai';
+import {use} from 'chai';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
+import * as TypeMoq from 'typemoq';
+
+const {isValue} = TypeMoq.It;
 
 import Adapter from './Adapter';
 
 use(sinonChai);
 
-const getAdapter: any = () => new Adapter(new AWS.SecretsManager({}));
+const mock = TypeMoq.Mock.ofInstance(new AWS.SecretsManager({}), TypeMoq.MockBehavior.Strict);
 
-describe('src/Secretary.ts', () => {
-    it('should be able to construct', () => {
-        expect(getAdapter()).to.be.instanceOf(Adapter);
-    });
+const getAdapter: any = () => new Adapter(mock.object);
 
-    it('should be able fetch a single secret from the adapter', async () => {
-        AWSMock.mock('SecretsManager', 'getSecretValue', ({SecretId}) => {
-            expect(SecretId).to.equal('path');
+beforeEach(() => mock.reset());
+afterEach(() => mock.verifyAll());
 
-            return Promise.resolve({SecretString: JSON.stringify({key: 'baz', key2: 'bar'})});
-        });
+const response = (data?: any): any => {
+    if (typeof data === 'string') {
+        data = {SecretString: data};
+    }
 
-        const adapter = getAdapter();
+    return {
+        promise: () => Promise.resolve(data),
+    };
+};
 
-        expect(await adapter.getSecret({key: 'key', path: 'path'})).to.deep.equal({
-            key: 'key', path: 'path', value: 'baz',
-        });
-        expect(await adapter.getSecret({key: 'key2', path: 'path'})).to.deep.equal({
-            key: 'key2', path: 'path', value: 'bar',
-        });
+const reject = (): any => {
+    return {promise: () => Promise.reject()};
+};
 
-        AWSMock.restore();
-    });
+AdapterTest(
+    'src/Adapter.ts',
+    getAdapter,
+    {
+        constructor:  (_) => {
+        },
+        getSecret:    (_: Adapter, exp: any[]) => {
+            mock
+                .setup((x) => x.getSecretValue(isValue({SecretId: exp[0][0]}), TypeMoq.It.isAny()))
+                .returns(() => response(exp[0][1].value));
 
-    it('should be able fetch a group of secret from the adapter', async () => {
-        AWSMock.mock('SecretsManager', 'getSecretValue', ({SecretId}) => {
-            expect(SecretId).to.equal('path');
+            mock
+                .setup((x) => x.getSecretValue(isValue({SecretId: exp[1][0]}), TypeMoq.It.isAny()))
+                .returns(() => response(JSON.stringify(exp[1][1].value)));
 
-            return Promise.resolve({SecretString: JSON.stringify({key: 'baz', key2: 'bar'})});
-        });
+            mock
+                .setup((x) => x.getSecretValue(isValue({SecretId: exp[2][0]}), TypeMoq.It.isAny()))
+                .returns(() => reject());
 
-        const adapter = getAdapter();
+        },
+        putSecret:    (_: Adapter, exp: any[]) => {
+            mock
+                .setup((x) => x.updateSecret(isValue({SecretId: exp[0][0].key, SecretString: exp[0][0].value})))
+                .returns(() => reject());
+            mock
+                .setup((x) => x.createSecret(isValue({Name: exp[0][0].key, SecretString: exp[0][0].value})))
+                .returns(() => response({}));
 
-        expect(await adapter.getSecrets({path: 'path'})).to.deep.equal([
-            {key: 'key', path: 'path', value: 'baz'},
-            {key: 'key2', path: 'path', value: 'bar'},
-        ]);
+            mock
+                .setup((x) => x.updateSecret(isValue({SecretId: exp[1][0].key, SecretString: exp[1][0].value})))
+                .returns(() => reject());
+            mock
+                .setup((x) => x.createSecret(isValue({Name: exp[1][0].key, SecretString: exp[1][0].value})))
+                .returns(() => response({}));
 
-        AWSMock.restore();
-    });
+            mock
+                .setup((x) => x.updateSecret(isValue({SecretId: exp[1][0].key, SecretString: exp[1][1]})))
+                .returns(() => response({}));
+        },
+        deleteSecret: (_: Adapter, exp: any[]) => {
+            mock
+                .setup((x) => x.createSecret(isValue({Name: exp[0][0].key, SecretString: exp[0][0].value})))
+                .returns(() => response({}));
 
-    it('should be able to add a secret', async () => {
-        AWSMock.mock('SecretsManager', 'getSecretValue', ({SecretId}) => {
-            expect(SecretId).to.equal('path');
+            mock
+                .setup((x) => x.deleteSecret(isValue({SecretId: exp[0][0].key})))
+                .returns(() => response({}))
+                .verifiable(TypeMoq.Times.exactly(2));
 
-            return Promise.reject();
-        });
-        AWSMock.mock('SecretsManager', 'createSecret', ({Name, SecretString}) => {
-            expect(Name).to.equal('path');
-            expect(JSON.parse(SecretString)).to.deep.equal({key: 'baz'});
+            mock
+                .setup((x) => x.getSecretValue(isValue({SecretId: exp[0][0].key})))
+                .returns(() => reject());
 
-            return Promise.resolve();
-        });
-
-        const adapter = getAdapter();
-
-        await adapter.putSecret({
-            path:        'path',
-            key:         'key',
-            value:       'baz',
-            KmsKeyId:    'a',
-            Description: 'test',
-            Tags:        {foo: 'bar'},
-        });
-
-        AWSMock.restore();
-    });
-
-    it('should be able to update a secret', async () => {
-        AWSMock.mock('SecretsManager', 'getSecretValue', ({SecretId}) => {
-            expect(SecretId).to.equal('path');
-
-            return Promise.resolve({SecretString: JSON.stringify({key: 'baz'})});
-        });
-        AWSMock.mock('SecretsManager', 'updateSecret', ({SecretId, SecretString}) => {
-            expect(SecretId).to.equal('path');
-            expect(JSON.parse(SecretString)).to.deep.equal({key: 'baz', key2: 'bar'});
-
-            return Promise.resolve();
-        });
-
-        const adapter = getAdapter();
-
-        await adapter.putSecret({
-            path:        'path',
-            key:         'key2',
-            value:       'bar',
-            KmsKeyId:    'a',
-            Description: 'test',
-        });
-
-        AWSMock.restore();
-    });
-
-    it('should be able to add multiple secrets', async () => {
-        AWSMock.mock('SecretsManager', 'getSecretValue', ({SecretId}) => {
-            expect(SecretId).to.equal('path');
-
-            return Promise.reject();
-        });
-        AWSMock.mock('SecretsManager', 'createSecret', ({Name, SecretString}) => {
-            expect(Name).to.equal('path');
-            expect(JSON.parse(SecretString)).to.deep.equal({key: 'baz'});
-
-            return Promise.resolve();
-        });
-
-        const adapter = getAdapter();
-
-        await adapter.putSecrets({secrets: [{path: 'path', key: 'key', value: 'baz'}]});
-
-        AWSMock.restore();
-    });
-
-    it('should be able to update multiple secrets', async () => {
-        AWSMock.mock('SecretsManager', 'getSecretValue', ({SecretId}) => {
-            expect(SecretId).to.equal('path');
-
-            return Promise.resolve({SecretString: JSON.stringify({key: 'baz'})});
-        });
-        AWSMock.mock('SecretsManager', 'updateSecret', ({SecretId, SecretString}) => {
-            expect(SecretId).to.equal('path');
-            expect(JSON.parse(SecretString)).to.deep.equal({key: 'baz', key2: 'bar'});
-
-            return Promise.resolve();
-        });
-
-        const adapter = getAdapter();
-
-        await adapter.putSecrets({secrets: [{path: 'path', key: 'key2', value: 'bar'}]});
-
-        AWSMock.restore();
-    });
-});
+            mock
+                .setup((x) => x.deleteSecret(isValue({SecretId: exp[0][0].key})))
+                .returns(() => reject())
+                .verifiable(TypeMoq.Times.exactly(2));
+        },
+    },
+);

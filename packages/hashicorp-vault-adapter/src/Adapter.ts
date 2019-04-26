@@ -20,7 +20,7 @@ export default class Adapter extends AbstractAdapter {
         this.secretPath = secretPath || 'secret';
     }
 
-    public async getSecret(key: string, options?: OptionsInterface): Promise<Secret> {
+    public async getSecret(key: string, options: OptionsInterface = {}): Promise<Secret> {
         await this.logIn();
 
         try {
@@ -33,7 +33,7 @@ export default class Adapter extends AbstractAdapter {
         }
     }
 
-    public async putSecret(secret: Secret, options?: OptionsInterface): Promise<Secret> {
+    public async putSecret(secret: Secret, options: OptionsInterface = {}): Promise<Secret> {
         await this.logIn();
 
         const newData: any = typeof secret.value !== 'string' ? JSON.stringify(secret.value) : secret.value;
@@ -44,7 +44,7 @@ export default class Adapter extends AbstractAdapter {
         return secret.withMetadata(metadata);
     }
 
-    public async deleteSecret(secret: Secret, options?: OptionsInterface): Promise<void> {
+    public async deleteSecret(secret: Secret, options: OptionsInterface = {}): Promise<void> {
         await this.logIn();
 
         try {

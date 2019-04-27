@@ -1,4 +1,5 @@
-import {expect, use, should} from 'chai';
+/* istanbul ignore file */
+import {expect, should, use} from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';

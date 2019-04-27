@@ -1,37 +1,80 @@
-import {expect, use} from 'chai';
+import {expect, should, use} from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
-import sinon from 'ts-sinon';
+import * as TypeMoq from 'typemoq';
 
-import {AdapterInterface, Manager, Secret} from './';
+const {isValue} = TypeMoq.It;
+
+import {AbstractAdapter, AdapterInterface, Manager, Secret, SecretNotFoundError} from './';
 
 use(sinonChai);
+use(chaiAsPromised);
+should();
 
-const getManager = (adapter?: AdapterInterface) => new Manager(adapter);
+const mock       = TypeMoq.Mock.ofType<AbstractAdapter>(undefined, TypeMoq.MockBehavior.Strict);
+const getManager = (adapter?: AdapterInterface) => new Manager(adapter || mock.object);
 
-describe('src/Secretary.ts', () => {
-    it('should be able to construct', () => {
+beforeEach(() => mock.reset());
+afterEach(() => mock.verifyAll());
+
+describe('src/Manager.ts', () => {
+    it('constructor', () => {
         expect(getManager()).to.be.instanceOf(Manager);
     });
 
-    it('should be able fetch a secret from an adapter', async () => {
-        const adapter = sinon.spy();
-        const manager = getManager(adapter as any);
+    it('getSecret', async () => {
+        const manager = getManager();
 
-        // @todo Finish test
+        const secret = new Secret('foo', 'bar');
+        mock.setup((x) => x.getSecret(isValue(secret.key), isValue(undefined))).returns(() => Promise.resolve(secret));
+        mock.setup((x) => x.getSecret(isValue('bar'), isValue(undefined)))
+            .returns(() => Promise.reject(new SecretNotFoundError('bar')));
+
+        const result = await manager.getSecret('foo');
+
+        await Promise.all([
+            result.key.should.equal(secret.key),
+            result.value.should.equal(secret.value),
+            result.metadata.should.equal(secret.metadata),
+            result.should.deep.equal(secret),
+            manager.getSecret('bar').should.rejectedWith(SecretNotFoundError),
+        ]);
     });
 
-    it('should be able to add a secret', async () => {
-        const adapter = sinon.spy();
-        const manager = getManager(adapter as any);
+    it('putSecret', async () => {
+        const manager = getManager();
 
-        // @todo Finish test
+        const secret = new Secret('foo', 'bar');
+        mock.setup((x) => x.putSecret(isValue(secret), isValue(undefined))).returns(() => Promise.resolve(secret));
+
+        await manager.putSecret(secret).should.eventually.deep.equal(secret);
     });
 
-    it('should be able to delete a secret', async () => {
-        const adapter = sinon.spy();
-        const manager = getManager(adapter as any);
+    it('deleteSecret', async () => {
+        const manager = getManager();
 
-        // @todo Finish test
+        const secret    = new Secret('foo', 'bar');
+        const badSecret = new Secret('bar', 'foo');
+        mock.setup((x) => x.deleteSecret(isValue(secret), isValue(undefined))).returns(() => Promise.resolve());
+        mock.setup((x) => x.deleteSecret(isValue(badSecret), isValue(undefined)))
+            .returns(() => Promise.reject(new SecretNotFoundError('bar')));
+
+        await manager.deleteSecret(secret);
+        await manager.deleteSecret(badSecret).should.rejectedWith(SecretNotFoundError);
+    });
+
+    it('deleteSecretByKey', async () => {
+        const manager = getManager();
+
+        const secret    = new Secret('foo', 'bar');
+        const badSecret = new Secret('bar', 'foo');
+        mock.setup((x) => x.getSecret(isValue(secret.key), isValue(undefined))).returns(() => Promise.resolve(secret));
+        mock.setup((x) => x.deleteSecret(isValue(secret), isValue(undefined))).returns(() => Promise.resolve());
+        mock.setup((x) => x.getSecret(isValue(badSecret.key), isValue(undefined)))
+            .returns(() => Promise.reject(new SecretNotFoundError('bar')));
+
+        await manager.deleteSecretByKey(secret.key);
+        await manager.deleteSecretByKey(badSecret.key).should.rejectedWith(SecretNotFoundError);
     });
 });

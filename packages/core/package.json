@@ -44,6 +44,7 @@
         "@types/chai-as-promised": "^7.1.0",
         "@types/lru-cache": "^5.1.0",
         "@types/source-map-support": "^0.5.0",
-        "chai-as-promised": "^7.1.1"
+        "chai-as-promised": "^7.1.1",
+        "typemoq": "^2.1.0"
     }
 }

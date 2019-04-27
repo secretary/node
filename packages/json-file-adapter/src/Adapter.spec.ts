@@ -14,6 +14,8 @@ const getAdapter = () => {
     return new Adapter({file: filePath});
 };
 
+after(() => mockFs.restore());
+
 AdapterTest(
     'src/Adapter.ts',
     getAdapter,

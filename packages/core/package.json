@@ -1,7 +1,7 @@
 {
     "name": "@secretary/core",
     "description": "Secrets Manager for NodeJS",
-    "version": "1.0.1-alpha.9",
+    "version": "2.0.0-alpha.0",
     "repository": {
         "type": "github",
         "url": "https://github.com/secretarysecrets/node"

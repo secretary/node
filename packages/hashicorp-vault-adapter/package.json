@@ -1,5 +1,5 @@
 {
-    "name": "@secretary/vault",
+    "name": "@secretary/hashicorp-vault-adapter",
     "description": "Hashicorp Vault adapter for Secretary",
     "version": "1.0.1-alpha.9",
     "repository": {

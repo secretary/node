@@ -1,5 +1,5 @@
 {
-    "name": "@secretary/json-file",
+    "name": "@secretary/json-file-adapter",
     "description": "JSON File adapter for Secretary",
     "version": "1.0.1-alpha.9",
     "repository": {

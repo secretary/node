@@ -36,8 +36,11 @@
         "access": "public"
     },
     "dependencies": {
+        "@types/chai-as-promised": "^7.1.0",
+        "chai-as-promised": "^7.1.1",
         "lru-cache": "^5.1.1",
-        "source-map-support": "^0.5.11"
+        "source-map-support": "^0.5.11",
+        "typemoq": "^2.1.0"
     },
     "gitHead": "826e83a1ff5dbeee35cf36ed9b72f5fe4dfe83b9",
     "devDependencies": {

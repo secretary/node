@@ -35,7 +35,6 @@ export default class Adapter extends AbstractAdapter {
                 return secret.withValue(value);
             }
         } catch (e) {
-            console.error(e);
             throw new SecretNotFoundError(key);
         }
     }
@@ -53,7 +52,6 @@ export default class Adapter extends AbstractAdapter {
         try {
             await this.client.deleteSecret(this.vaultUri, secret.key, options);
         } catch (e) {
-            console.log(e);
             throw new SecretNotFoundError(secret.key);
         }
     }

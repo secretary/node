@@ -59,7 +59,6 @@ export default class Adapter extends AbstractAdapter {
         try {
             await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
         } catch (e) {
-            console.error(e);
             throw new SecretNotFoundError(secret.key);
         }
     }

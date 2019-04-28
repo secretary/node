@@ -17,10 +17,10 @@ Currently supports the following adapters:
 
 ```bash
 // If you want to use AWS Secrets Manager
-$ npm install @secretary/core @secretary/aws-secrets-manager
+$ npm install @secretary/core @secretary/aws-secrets-manager-adapter
 
 // If you want to use Hashicorp Vault
-$ npm install @secretary/core @secretary/vault
+$ npm install @secretary/core @secretary/hashicorp-vault-adapter
 ```
 
 Check the install docs of the adapter you want to use for specific instructions.
@@ -29,19 +29,26 @@ Check the install docs of the adapter you want to use for specific instructions.
 
 ```typescript
 import {Adapter, Secretary} from '@secretary/aws-secrets-manager';
-// Or: import {Adapter, Secretary} from '@secretary/vault';
-// Or: import {Adapter, Secretary} from '@secretary/credstash';
-// Or: import {Adapter, Secretary} from '@secretary/json-file';
+// Or: import {Adapter, Secretary} from '@secretary/hashicorp-vault-adapter';
+// Or: import {Adapter, Secretary} from '@secretary/json-file-adapter'; // Note: this is not for production
 import {SecretsManager} from 'aws-sdk';
 
-const manager = new Secretary({
-    adapter: new Adapter({client: new SecretsManager()})
-});
+const manager = new Secretary(new Adapter(new SecretsManager()));
 
 async function main() {
-    const someSecret = await manager.getSecret({key: 'host', path: 'database/redis/main'});
+    const someSecret = await manager.getSecret('database/redis/main');
 
-    console.log(someSecret); // redis://localhost:6379
+    console.log(someSecret); 
+    /*
+    Secret {
+        key: 'database/redis/main'
+        value: {
+            host: 'localhost',
+            port: 6379
+        },
+        metadata: // Metadata from the adapter
+    }        
+    */
 }
 ```
 

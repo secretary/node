@@ -21,7 +21,9 @@ const expected: { [key: string]: any[] } = {
         [new Secret('test', 'foobar')], // Add New
         [new Secret('test2', 'foobar'), 'baz'], // Update
     ],
-    deleteSecret: [[new Secret('test', 'foobar')]],
+    deleteSecret: [
+        [new Secret('test', 'foobar')],
+    ],
 };
 
 export default (

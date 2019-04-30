@@ -1,4 +1,4 @@
-import {AdapterTest} from '@secretary/core';
+import AdapterTest from '@secretary/core/dist/AdapterTest';
 import {use} from 'chai';
 import 'mocha';
 import * as mockFs from 'mock-fs';

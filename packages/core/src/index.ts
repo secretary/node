@@ -5,4 +5,3 @@ export {default as Secret, SecretValueType, MetadataType} from './Secret';
 export {default as Manager} from './Manager';
 export {default as SecretNotFoundError} from './SecretNotFoundError';
 export {default as InvalidKeyError} from './InvalidKeyError';
-export {default as AdapterTest} from './AdapterTest';

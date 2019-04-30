@@ -1,4 +1,4 @@
-import {AdapterTest} from '@secretary/core';
+import AdapterTest from '@secretary/core/dist/AdapterTest';
 import * as AWS from 'aws-sdk';
 import {use} from 'chai';
 import 'mocha';

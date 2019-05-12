@@ -27,7 +27,11 @@ export default class Adapter extends AbstractAdapter {
                 return secret.withValue(SecretString);
             }
         } catch (e) {
-            throw new SecretNotFoundError(key);
+            if (e.code === 'ResourceNotFoundException') {
+                throw new SecretNotFoundError(key);
+            }
+
+            throw e;
         }
     }
 

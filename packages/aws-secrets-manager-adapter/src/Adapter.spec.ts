@@ -28,8 +28,8 @@ const response = (data?: any): any => {
     };
 };
 
-const reject = (): any => {
-    return {promise: () => Promise.reject()};
+const reject = (...args: any): any => {
+    return {promise: () => Promise.reject(...args)};
 };
 
 AdapterTest(
@@ -49,7 +49,7 @@ AdapterTest(
 
             mock
                 .setup((x) => x.getSecretValue(isValue({SecretId: exp[2][0]}), TypeMoq.It.isAny()))
-                .returns(() => reject());
+                .returns(() => reject({code: 'ResourceNotFoundException'}));
 
         },
         putSecret:    (_: Adapter, exp: any[]) => {

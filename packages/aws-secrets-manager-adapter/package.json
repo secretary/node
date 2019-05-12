@@ -44,7 +44,7 @@
     "peerDependencies": {
         "aws-sdk": "^2.425.0"
     },
-    "gitHead": "826e83a1ff5dbeee35cf36ed9b72f5fe4dfe83b9",
+    "gitHead": "4fc03aeeaa04e6c7437336111ab52285f78d7769",
     "devDependencies": {
         "aws-sdk-mock": "^4.4.0",
         "typemoq": "^2.1.0"

@@ -27,7 +27,7 @@ export default class Adapter extends AbstractAdapter {
             try {
                 secretValue = JSON.parse(SecretString);
             } finally {
-                return new Secret<V>(key, secretValue, metadata);
+                return new Secret<V>(key, secretValue as any, metadata);
             }
         } catch (e) {
             if (e.code === 'ResourceNotFoundException') {

@@ -8,7 +8,7 @@ interface Secrets {
 }
 
 export default class Adapter extends AbstractAdapter {
-    private static updateValue<V>(
+    private static updateValue<V extends SecretValueType = any>(
         key: string,
         value: SecretValueType,
         secrets: Array<Secret<V>>,

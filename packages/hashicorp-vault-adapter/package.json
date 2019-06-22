@@ -1,7 +1,7 @@
 {
     "name": "@secretary/hashicorp-vault-adapter",
     "description": "Hashicorp Vault adapter for Secretary",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "repository": {
         "type": "github",
         "url": "https://github.com/secretarysecrets/node-vault"
@@ -35,7 +35,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@secretary/core": "^2.0.1",
+        "@secretary/core": "^2.0.2",
         "@types/chai-as-promised": "^7.1.0",
         "chai-as-promised": "^7.1.1",
         "typemoq": "^2.1.0"
@@ -43,7 +43,7 @@
     "peerDependencies": {
         "node-vault": "^0.9.6"
     },
-    "gitHead": "826e83a1ff5dbeee35cf36ed9b72f5fe4dfe83b9",
+    "gitHead": "4b53167661286165551c915ea68407f3f27454a2",
     "devDependencies": {
         "@types/node-vault": "^0.5.3",
         "node-vault": "^0.9.8",

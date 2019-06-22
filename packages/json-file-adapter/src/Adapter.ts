@@ -15,9 +15,9 @@ export default class Adapter extends AbstractAdapter {
     ): Array<Secret<V>> {
         const index = secrets.findIndex((s) => s.key === key);
         if (index >= 0) {
-            secrets[index] = secrets[index].withValue(value);
+            secrets[index] = secrets[index].withValue(value as V);
         } else {
-            secrets.push(new Secret<V>(key, value));
+            secrets.push(new Secret<V>(key, value as V));
         }
 
         return secrets;

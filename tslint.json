@@ -36,6 +36,7 @@
         "interface-name":           false,
         "newline-before-return":    true,
         "typedef":                  true,
+        "no-unsafe-finally":        false,
         "no-bitwise":               false
     },
     "jsRules": {

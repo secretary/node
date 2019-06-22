@@ -30,7 +30,7 @@ export default class Adapter extends AbstractAdapter {
             const result              = await this.client.read(`${this.secretPath}/${key}`, options);
             const {data, ...metadata} = result;
 
-            return new Secret(key, data, metadata);
+            return new Secret(key, data as V, metadata);
         } catch (e) {
             throw new SecretNotFoundError(key);
         }

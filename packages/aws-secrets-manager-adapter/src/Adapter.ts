@@ -23,7 +23,7 @@ export default class Adapter extends AbstractAdapter {
             const data                        = await this.client.getSecretValue(params).promise();
             const {SecretString, ...metadata} = data;
 
-            const secret = new Secret<V>(key, '', metadata as any);
+            const secret = new Secret<V>(key, '' as V, metadata as any);
             try {
                 return secret.withValue(JSON.parse(SecretString));
             } catch (e) {

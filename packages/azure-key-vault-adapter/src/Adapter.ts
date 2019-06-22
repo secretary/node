@@ -31,11 +31,11 @@ export default class Adapter extends AbstractAdapter {
             const bundle                   = await this.client.getSecret(this.vaultUri, key, options.version || '');
             const {id, value, ...metadata} = bundle;
 
-            const secret = new Secret<V>(key, null, metadata as any);
+            let secretValue = value;
             try {
-                return secret.withValue(JSON.parse(value));
-            } catch (e) {
-                return secret.withValue(value);
+                secretValue = JSON.parse(value);
+            } finally {
+                return new Secret<V>(key, secretValue, metadata);
             }
         } catch (e) {
             throw new SecretNotFoundError(key);

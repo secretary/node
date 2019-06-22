@@ -23,11 +23,11 @@ export default class Adapter extends AbstractAdapter {
             const data                        = await this.client.getSecretValue(params).promise();
             const {SecretString, ...metadata} = data;
 
-            const secret = new Secret<V>(key, null, metadata as any);
+            let secretValue = SecretString;
             try {
-                return secret.withValue(JSON.parse(SecretString));
-            } catch (e) {
-                return secret.withValue(SecretString);
+                secretValue = JSON.parse(SecretString);
+            } finally {
+                return new Secret<V>(key, secretValue, metadata);
             }
         } catch (e) {
             if (e.code === 'ResourceNotFoundException') {

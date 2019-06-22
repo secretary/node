@@ -27,7 +27,7 @@ export default class Adapter extends AbstractAdapter {
         super();
     }
 
-    public async getSecret(key: string, _options?: OptionsInterface): Promise<Secret> {
+    public async getSecret<S extends Secret>(key: string, _options?: OptionsInterface): Promise<S> {
         const secrets = await this.loadSecrets();
 
         const secret = secrets.find((s) => s.key === key);
@@ -35,10 +35,10 @@ export default class Adapter extends AbstractAdapter {
             throw new SecretNotFoundError(key);
         }
 
-        return secret;
+        return secret as S;
     }
 
-    public async putSecret(secret: Secret, _options?: OptionsInterface): Promise<Secret> {
+    public async putSecret<S extends Secret>(secret: S, _options?: OptionsInterface): Promise<S> {
         const secrets = Adapter.updateValue(secret.key, secret.value, await this.loadSecrets());
 
         await this.saveSecrets(secrets);
@@ -46,7 +46,7 @@ export default class Adapter extends AbstractAdapter {
         return secret;
     }
 
-    public async deleteSecret(secret: Secret, _options?: OptionsInterface): Promise<void> {
+    public async deleteSecret<S extends Secret>(secret: S, _options?: OptionsInterface): Promise<void> {
         const secrets = await this.loadSecrets();
 
         const index = secrets.findIndex((s) => s.key === secret.key);

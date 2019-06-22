@@ -20,20 +20,20 @@ export default class Adapter extends AbstractAdapter {
         this.secretPath = secretPath || 'secret';
     }
 
-    public async getSecret(key: string, options: OptionsInterface = {}): Promise<Secret> {
+    public async getSecret<S extends Secret>(key: string, options: OptionsInterface = {}): Promise<S> {
         await this.logIn();
 
         try {
             const result              = await this.client.read(`${this.secretPath}/${key}`, options);
             const {data, ...metadata} = result;
 
-            return new Secret(key, data, metadata);
+            return new Secret(key, data, metadata) as S;
         } catch (e) {
             throw new SecretNotFoundError(key);
         }
     }
 
-    public async putSecret(secret: Secret, options: OptionsInterface = {}): Promise<Secret> {
+    public async putSecret<S extends Secret>(secret: S, options: OptionsInterface = {}): Promise<S> {
         await this.logIn();
 
         const newData: any = typeof secret.value !== 'string' ? JSON.stringify(secret.value) : secret.value;
@@ -41,10 +41,10 @@ export default class Adapter extends AbstractAdapter {
         const result              = await this.client.write(`${this.secretPath}/${secret.key}`, newData, options);
         const {data, ...metadata} = result;
 
-        return secret.withMetadata(metadata);
+        return secret.withMetadata(metadata) as S;
     }
 
-    public async deleteSecret(secret: Secret, options: OptionsInterface = {}): Promise<void> {
+    public async deleteSecret<S extends Secret>(secret: S, options: OptionsInterface = {}): Promise<void> {
         await this.logIn();
 
         try {

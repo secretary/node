@@ -4,15 +4,15 @@ export default interface AdapterInterface {
     /**
      * Fetch a single secret from the adapter
      */
-    getSecret(key: string, options?: OptionsInterface): Promise<Secret>;
+    getSecret<S extends Secret>(key: string, options?: OptionsInterface): Promise<S>;
 
     /**
      * Put a secret in the adapter
      */
-    putSecret(secret: Secret, options?: OptionsInterface): Promise<Secret>;
+    putSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<S>;
 
     /**
      * Delete a secrets in the adapter
      */
-    deleteSecret(secret: Secret, options?: OptionsInterface): Promise<void>;
+    deleteSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<void>;
 }

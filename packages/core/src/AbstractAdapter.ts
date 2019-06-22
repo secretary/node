@@ -4,15 +4,15 @@ export default abstract class implements AdapterInterface {
     /**
      * Fetch a single secret from the adapter
      */
-    public abstract getSecret(key: string, options?: OptionsInterface): Promise<Secret>;
+    public abstract getSecret<S extends Secret>(key: string, options?: OptionsInterface): Promise<S>;
 
     /**
      * Put a secret in the adapter
      */
-    public abstract putSecret(secret: Secret, options?: OptionsInterface): Promise<Secret>;
+    public abstract putSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<S>;
 
     /**
      * Delete a secrets in the adapter
      */
-    public abstract deleteSecret(secret: Secret, options?: OptionsInterface): Promise<void>;
+    public abstract deleteSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<void>;
 }

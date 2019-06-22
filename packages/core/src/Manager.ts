@@ -5,7 +5,7 @@ import {AbstractAdapter, InvalidKeyError, OptionsInterface, Secret, SecretNotFou
 /**
  * Secrets Manager class.
  */
-export default class Manager<T extends AbstractAdapter> {
+export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
     /**
      * @param {AbstractAdapter} adapter
      */
@@ -24,8 +24,8 @@ export default class Manager<T extends AbstractAdapter> {
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async getSecret(key: string, options?: OptionsInterface): Promise<Secret> {
-        return this.adapter.getSecret(key, options);
+    public async getSecret<S extends Secret>(key: string, options?: OptionsInterface): Promise<S> {
+        return this.adapter.getSecret<S>(key, options);
     }
 
     /**
@@ -40,8 +40,8 @@ export default class Manager<T extends AbstractAdapter> {
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async putSecret(secret: Secret, options?: OptionsInterface): Promise<Secret> {
-        return this.adapter.putSecret(secret, options);
+    public async putSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<S> {
+        return this.adapter.putSecret<S>(secret, options);
     }
 
     /**
@@ -56,7 +56,7 @@ export default class Manager<T extends AbstractAdapter> {
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecret(secret: Secret, options?: OptionsInterface): Promise<void> {
+    public async deleteSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<void> {
         return this.adapter.deleteSecret(secret, options);
     }
 

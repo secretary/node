@@ -7,7 +7,7 @@ export default class Adapter extends AbstractAdapter {
         super();
     }
 
-    public async getSecret(key: string, options: OptionsInterface = {}): Promise<Secret> {
+    public async getSecret<S extends Secret>(key: string, options: OptionsInterface = {}): Promise<S> {
         const params: SecretsManager.GetSecretValueRequest = {SecretId: key};
         if (options.versionId) {
             params.VersionId = options.versionId;
@@ -22,9 +22,9 @@ export default class Adapter extends AbstractAdapter {
 
             const secret: Secret = new Secret(key, '', metadata as any);
             try {
-                return secret.withValue(JSON.parse(SecretString));
+                return secret.withValue(JSON.parse(SecretString)) as S;
             } catch (e) {
-                return secret.withValue(SecretString);
+                return secret.withValue(SecretString) as S;
             }
         } catch (e) {
             if (e.code === 'ResourceNotFoundException') {
@@ -35,7 +35,7 @@ export default class Adapter extends AbstractAdapter {
         }
     }
 
-    public async putSecret(secret: Secret, options: OptionsInterface = {}): Promise<Secret> {
+    public async putSecret<S extends Secret>(secret: S, options: OptionsInterface = {}): Promise<S> {
         options.SecretString = typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value);
 
         try {
@@ -48,18 +48,18 @@ export default class Adapter extends AbstractAdapter {
                 response = {...response, ...tagResponse};
             }
 
-            return secret.withMetadata(response);
+            return secret.withMetadata(response) as S;
         } catch (e) {
             options.Name = secret.key;
             delete options.SecretId;
 
             const response = await this.client.createSecret(options as CreateSecretRequest).promise();
 
-            return secret.withMetadata(response);
+            return secret.withMetadata(response) as S;
         }
     }
 
-    public async deleteSecret(secret: Secret, options: OptionsInterface = {}): Promise<void> {
+    public async deleteSecret<S extends Secret>(secret: S, options: OptionsInterface = {}): Promise<void> {
         try {
             await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
         } catch (e) {

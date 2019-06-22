@@ -1,4 +1,4 @@
-import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError} from '@secretary/core';
+import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from '@secretary/core';
 import {SecretsManager} from 'aws-sdk';
 import {CreateSecretRequest, UpdateSecretRequest} from 'aws-sdk/clients/secretsmanager';
 
@@ -7,7 +7,10 @@ export default class Adapter extends AbstractAdapter {
         super();
     }
 
-    public async getSecret<S extends Secret>(key: string, options: OptionsInterface = {}): Promise<S> {
+    public async getSecret<V extends SecretValueType = any>(
+        key: string,
+        options: OptionsInterface = {},
+    ): Promise<Secret<V>> {
         const params: SecretsManager.GetSecretValueRequest = {SecretId: key};
         if (options.versionId) {
             params.VersionId = options.versionId;
@@ -20,11 +23,11 @@ export default class Adapter extends AbstractAdapter {
             const data                        = await this.client.getSecretValue(params).promise();
             const {SecretString, ...metadata} = data;
 
-            const secret: Secret = new Secret(key, '', metadata as any);
+            const secret = new Secret<V>(key, '', metadata as any);
             try {
-                return secret.withValue(JSON.parse(SecretString)) as S;
+                return secret.withValue(JSON.parse(SecretString));
             } catch (e) {
-                return secret.withValue(SecretString) as S;
+                return secret.withValue(SecretString);
             }
         } catch (e) {
             if (e.code === 'ResourceNotFoundException') {
@@ -35,31 +38,37 @@ export default class Adapter extends AbstractAdapter {
         }
     }
 
-    public async putSecret<S extends Secret>(secret: S, options: OptionsInterface = {}): Promise<S> {
+    public async putSecret<V extends SecretValueType = any>(
+        secret: Secret<V>,
+        options: OptionsInterface = {},
+    ): Promise<Secret<V>> {
         options.SecretString = typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value);
 
         try {
-            options.SecretId = secret.key;
+            options.SecretId        = secret.key;
             const {Tags, ...params} = options;
 
             let response = await this.client.updateSecret(params as UpdateSecretRequest).promise();
             if (Tags !== undefined) {
                 const tagResponse = await this.client.tagResource({SecretId: secret.key, Tags}).promise();
-                response = {...response, ...tagResponse};
+                response          = {...response, ...tagResponse};
             }
 
-            return secret.withMetadata(response) as S;
+            return secret.withMetadata(response);
         } catch (e) {
             options.Name = secret.key;
             delete options.SecretId;
 
             const response = await this.client.createSecret(options as CreateSecretRequest).promise();
 
-            return secret.withMetadata(response) as S;
+            return secret.withMetadata(response);
         }
     }
 
-    public async deleteSecret<S extends Secret>(secret: S, options: OptionsInterface = {}): Promise<void> {
+    public async deleteSecret<V extends SecretValueType = any>(
+        secret: Secret<V>,
+        options: OptionsInterface = {},
+    ): Promise<void> {
         try {
             await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
         } catch (e) {

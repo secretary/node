@@ -1,18 +1,18 @@
-import {OptionsInterface, Secret} from './';
+import {OptionsInterface, Secret, SecretValueType} from './';
 
 export default interface AdapterInterface {
     /**
      * Fetch a single secret from the adapter
      */
-    getSecret<S extends Secret>(key: string, options?: OptionsInterface): Promise<S>;
+    getSecret<V extends SecretValueType = any>(key: string, options?: OptionsInterface): Promise<Secret<V>>;
 
     /**
      * Put a secret in the adapter
      */
-    putSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<S>;
+    putSecret<V extends SecretValueType = any>(secret: Secret<V>, options?: OptionsInterface): Promise<Secret<V>>;
 
     /**
      * Delete a secrets in the adapter
      */
-    deleteSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<void>;
+    deleteSecret<V extends SecretValueType = any>(secret: Secret<V>, options?: OptionsInterface): Promise<void>;
 }

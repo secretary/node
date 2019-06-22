@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 
-import {AbstractAdapter, InvalidKeyError, OptionsInterface, Secret, SecretNotFoundError} from './';
+import {AbstractAdapter, InvalidKeyError, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from './';
 
 /**
  * Secrets Manager class.
@@ -24,8 +24,11 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async getSecret<S extends Secret>(key: string, options?: OptionsInterface): Promise<S> {
-        return this.adapter.getSecret<S>(key, options);
+    public async getSecret<V extends SecretValueType = any>(
+        key: string,
+        options?: OptionsInterface,
+    ): Promise<Secret<V>> {
+        return this.adapter.getSecret<V>(key, options);
     }
 
     /**
@@ -40,8 +43,11 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async putSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<S> {
-        return this.adapter.putSecret<S>(secret, options);
+    public async putSecret<V extends SecretValueType = any>(
+        secret: Secret<V>,
+        options?: OptionsInterface,
+    ): Promise<Secret<V>> {
+        return this.adapter.putSecret<V>(secret, options);
     }
 
     /**
@@ -56,7 +62,10 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecret<S extends Secret>(secret: S, options?: OptionsInterface): Promise<void> {
+    public async deleteSecret<V extends SecretValueType = any>(
+        secret: Secret<V>,
+        options?: OptionsInterface,
+    ): Promise<void> {
         return this.adapter.deleteSecret(secret, options);
     }
 

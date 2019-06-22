@@ -8,16 +8,16 @@ interface Secrets {
 }
 
 export default class Adapter extends AbstractAdapter {
-    private static updateValue(
+    private static updateValue<V>(
         key: string,
         value: SecretValueType,
-        secrets: Secret[],
-    ): Secret[] {
+        secrets: Array<Secret<V>>,
+    ): Array<Secret<V>> {
         const index = secrets.findIndex((s) => s.key === key);
         if (index >= 0) {
             secrets[index] = secrets[index].withValue(value);
         } else {
-            secrets.push(new Secret(key, value));
+            secrets.push(new Secret<V>(key, value));
         }
 
         return secrets;
@@ -27,8 +27,11 @@ export default class Adapter extends AbstractAdapter {
         super();
     }
 
-    public async getSecret<S extends Secret>(key: string, _options?: OptionsInterface): Promise<S> {
-        const secrets = await this.loadSecrets();
+    public async getSecret<V extends SecretValueType = any>(
+        key: string,
+        _options?: OptionsInterface,
+    ): Promise<Secret<V>> {
+        const secrets = await this.loadSecrets<V>();
 
         const secret = secrets.find((s) => s.key === key);
         if (!secret) {
@@ -38,16 +41,22 @@ export default class Adapter extends AbstractAdapter {
         return secret as S;
     }
 
-    public async putSecret<S extends Secret>(secret: S, _options?: OptionsInterface): Promise<S> {
-        const secrets = Adapter.updateValue(secret.key, secret.value, await this.loadSecrets());
+    public async putSecret<V extends SecretValueType = any>(
+        secret: Secret<V>,
+        _options?: OptionsInterface,
+    ): Promise<Secret<V>> {
+        const secrets = Adapter.updateValue(secret.key, secret.value, await this.loadSecrets<V>());
 
         await this.saveSecrets(secrets);
 
         return secret;
     }
 
-    public async deleteSecret<S extends Secret>(secret: S, _options?: OptionsInterface): Promise<void> {
-        const secrets = await this.loadSecrets();
+    public async deleteSecret<V extends SecretValueType = any>(
+        secret: Secret<V>,
+        _options?: OptionsInterface,
+    ): Promise<void> {
+        const secrets = await this.loadSecrets<V>();
 
         const index = secrets.findIndex((s) => s.key === secret.key);
         if (index === -1) {
@@ -58,7 +67,7 @@ export default class Adapter extends AbstractAdapter {
         await this.saveSecrets(secrets);
     }
 
-    private async loadSecrets(): Promise<Secret[]> {
+    private async loadSecrets<V extends SecretValueType = any>(): Promise<Array<Secret<V>>> {
         return new Promise((resolve, reject) => {
             readFile(this.config.file, (err, buffer) => {
                 if (err) {
@@ -67,12 +76,12 @@ export default class Adapter extends AbstractAdapter {
 
                 const secrets = JSON.parse(buffer.toString('utf8'));
 
-                resolve(secrets.map((s) => new Secret(s._key, s._value, s._metadata)));
+                resolve(secrets.map((s) => new Secret<V>(s._key, s._value, s._metadata)));
             });
         });
     }
 
-    private async saveSecrets(secrets: Secret[]): Promise<void> {
+    private async saveSecrets<V>(secrets: Array<Secret<V>>): Promise<void> {
         return new Promise((resolve, reject) => {
             writeFile(
                 this.config.file,

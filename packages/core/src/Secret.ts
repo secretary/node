@@ -3,7 +3,7 @@ export type SecretValueType = string | { [key: string]: string };
 export type MetadataType = { [key: string]: any };
 
 export default class Secret<Value extends SecretValueType = any> {
-    public constructor(private _key: string, private _value: Value, private _metadata: MetadataType = {}) {
+    public constructor(private _key: string, private _value?: Value, private _metadata: MetadataType = {}) {
     }
 
     public get key(): string {
@@ -18,7 +18,7 @@ export default class Secret<Value extends SecretValueType = any> {
         return this._metadata;
     }
 
-    public withValue(value: Value): Secret<Value> {
+    public withValue<NewValue extends SecretValueType = any>(value: NewValue): Secret<NewValue> {
         return new Secret(this._key, value, this._metadata);
     }
 

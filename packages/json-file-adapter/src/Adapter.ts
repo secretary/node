@@ -38,7 +38,7 @@ export default class Adapter extends AbstractAdapter {
             throw new SecretNotFoundError(key);
         }
 
-        return secret as S;
+        return secret;
     }
 
     public async putSecret<V extends SecretValueType = any>(
@@ -81,7 +81,7 @@ export default class Adapter extends AbstractAdapter {
         });
     }
 
-    private async saveSecrets<V>(secrets: Array<Secret<V>>): Promise<void> {
+    private async saveSecrets<V extends SecretValueType = any>(secrets: Array<Secret<V>>): Promise<void> {
         return new Promise((resolve, reject) => {
             writeFile(
                 this.config.file,

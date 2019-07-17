@@ -68,9 +68,7 @@ export default class Adapter extends AbstractAdapter {
      */
     private async logIn(): Promise<void> {
         if (this.appRole) {
-            const {roleId: role_id, secretId: secret_id} = this.appRole;
-
-            await this.client.approleLogin({role_id, secret_id});
+            await this.client.approleLogin({role_id: this.appRole.roleId, secret_id: this.appRole.secretId});
         }
     }
 }

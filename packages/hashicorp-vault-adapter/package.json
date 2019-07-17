@@ -43,7 +43,7 @@
     "peerDependencies": {
         "node-vault": "^0.9.6"
     },
-    "gitHead": "4b53167661286165551c915ea68407f3f27454a2",
+    "gitHead": "cfe52b6a8662a1dfdcbfce2cdb6f5904a4e5bb36",
     "devDependencies": {
         "@types/node-vault": "^0.5.3",
         "node-vault": "^0.9.8",

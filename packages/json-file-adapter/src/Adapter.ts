@@ -76,7 +76,7 @@ export default class Adapter extends AbstractAdapter {
 
                 const secrets = JSON.parse(buffer.toString('utf8'));
 
-                resolve(secrets.map((s) => new Secret<V>(s._key, s._value, s._metadata)));
+                resolve(secrets.map((s) => new Secret<V>(s.key, s.value, s.metadata)));
             });
         });
     }

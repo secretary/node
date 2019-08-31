@@ -1,28 +1,20 @@
 /* tslint:disable:interface-over-type-literal */
-export type SecretValueType = string | { [key: string]: string };
-export type MetadataType = { [key: string]: any };
+export type SecretValueType = string | {[key: string]: string};
+export type MetadataType = {[key: string]: any};
 
 export default class Secret<Value extends SecretValueType = any> {
-    public constructor(private _key: string, private _value?: Value, private _metadata: MetadataType = {}) {
-    }
-
-    public get key(): string {
-        return this._key;
-    }
-
-    public get value(): Value {
-        return this._value;
-    }
-
-    public get metadata(): any {
-        return this._metadata;
+    public constructor(
+        public readonly key: string,
+        public readonly value?: Value,
+        public readonly metadata: MetadataType = {}
+    ) {
     }
 
     public withValue<NewValue extends SecretValueType = any>(value: NewValue): Secret<NewValue> {
-        return new Secret(this._key, value, this._metadata);
+        return new Secret(this.key, value, this.metadata);
     }
 
     public withMetadata(metadata: any): Secret<Value> {
-        return new Secret(this._key, this._value, metadata);
+        return new Secret(this.key, this.value, metadata);
     }
 }

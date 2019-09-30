@@ -1,5 +1,5 @@
 # Secretary - NodeJS Secrets Management 
-[![Build Status](https://travis-ci.org/secretarysecrets/node.svg?branch=master)](https://travis-ci.org/secretarysecrets/node)
+[![Build Status](https://travis-ci.org/secretary/node.svg?branch=master)](https://travis-ci.org/secretary/node)
 [![codecov](https://codecov.io/gh/secretarysecrets/node/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node)
 
 ___

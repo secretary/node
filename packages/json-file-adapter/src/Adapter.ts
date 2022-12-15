@@ -1,14 +1,15 @@
-import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from '@secretary/core';
 import {readFile, writeFile} from 'fs';
+
+import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from '@secretary/core';
 
 import Configuration from './Configuration';
 
-interface Secrets {
-    [key: string]: string | Secrets;
-}
-
 export default class Adapter extends AbstractAdapter {
-    private static updateValue<V extends SecretValueType = any>(
+    public constructor(protected readonly config: Configuration) {
+        super();
+    }
+
+    private static updateValue<V extends SecretValueType = SecretValueType>(
         key: string,
         value: SecretValueType,
         secrets: Array<Secret<V>>,
@@ -23,12 +24,9 @@ export default class Adapter extends AbstractAdapter {
         return secrets;
     }
 
-    public constructor(protected readonly config: Configuration) {
-        super();
-    }
-
-    public async getSecret<V extends SecretValueType = any>(
+    public async getSecret<V extends SecretValueType = SecretValueType>(
         key: string,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _options?: OptionsInterface,
     ): Promise<Secret<V>> {
         const secrets = await this.loadSecrets<V>();
@@ -41,8 +39,9 @@ export default class Adapter extends AbstractAdapter {
         return secret;
     }
 
-    public async putSecret<V extends SecretValueType = any>(
+    public async putSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _options?: OptionsInterface,
     ): Promise<Secret<V>> {
         const secrets = Adapter.updateValue(secret.key, secret.value, await this.loadSecrets<V>());
@@ -52,8 +51,9 @@ export default class Adapter extends AbstractAdapter {
         return secret;
     }
 
-    public async deleteSecret<V extends SecretValueType = any>(
+    public async deleteSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _options?: OptionsInterface,
     ): Promise<void> {
         const secrets = await this.loadSecrets<V>();
@@ -67,21 +67,21 @@ export default class Adapter extends AbstractAdapter {
         await this.saveSecrets(secrets);
     }
 
-    private async loadSecrets<V extends SecretValueType = any>(): Promise<Array<Secret<V>>> {
+    private async loadSecrets<V extends SecretValueType = SecretValueType>(): Promise<Array<Secret<V>>> {
         return new Promise((resolve, reject) => {
             readFile(this.config.file, (err, buffer) => {
                 if (err) {
                     return reject(err);
                 }
 
-                const secrets = JSON.parse(buffer.toString('utf8'));
+                const secrets = JSON.parse(buffer.toString('utf8')) as Secret<V>[];
 
                 resolve(secrets.map((s) => new Secret<V>(s.key, s.value, s.metadata)));
             });
         });
     }
 
-    private async saveSecrets<V extends SecretValueType = any>(secrets: Array<Secret<V>>): Promise<void> {
+    private async saveSecrets<V extends SecretValueType = SecretValueType>(secrets: Array<Secret<V>>): Promise<void> {
         return new Promise((resolve, reject) => {
             writeFile(
                 this.config.file,

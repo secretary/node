@@ -1,3 +1,3 @@
-export default interface OptionsInterface {
-    [key: string]: any;
-}
+type OptionsInterface = Record<string, string | number | boolean>;
+
+export default OptionsInterface;

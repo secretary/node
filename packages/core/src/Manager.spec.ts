@@ -3,17 +3,16 @@ import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
 import * as TypeMoq from 'typemoq';
+import {AbstractAdapter, AdapterInterface, Manager, Secret, SecretNotFoundError} from './';
 
 const {isValue} = TypeMoq.It;
-
-import {AbstractAdapter, AdapterInterface, Manager, Secret, SecretNotFoundError} from './';
 
 use(sinonChai);
 use(chaiAsPromised);
 should();
 
-const mock       = TypeMoq.Mock.ofType<AbstractAdapter>(undefined, TypeMoq.MockBehavior.Strict);
-const getManager = (adapter?: AdapterInterface) => new Manager(adapter || mock.object);
+const mock = TypeMoq.Mock.ofType<AbstractAdapter>(undefined, TypeMoq.MockBehavior.Strict);
+const getManager = (adapter?: AdapterInterface) => new Manager({default: adapter || mock.object});
 
 beforeEach(() => mock.reset());
 afterEach(() => mock.verifyAll());
@@ -54,7 +53,7 @@ describe('src/Manager.ts', () => {
     it('deleteSecret', async () => {
         const manager = getManager();
 
-        const secret    = new Secret('foo', 'bar');
+        const secret = new Secret('foo', 'bar');
         const badSecret = new Secret('bar', 'foo');
         mock.setup((x) => x.deleteSecret(isValue(secret), isValue(undefined))).returns(() => Promise.resolve());
         mock.setup((x) => x.deleteSecret(isValue(badSecret), isValue(undefined)))
@@ -67,7 +66,7 @@ describe('src/Manager.ts', () => {
     it('deleteSecretByKey', async () => {
         const manager = getManager();
 
-        const secret    = new Secret('foo', 'bar');
+        const secret = new Secret('foo', 'bar');
         const badSecret = new Secret('bar', 'foo');
         mock.setup((x) => x.getSecret(isValue(secret.key), isValue(undefined))).returns(() => Promise.resolve(secret));
         mock.setup((x) => x.deleteSecret(isValue(secret), isValue(undefined))).returns(() => Promise.resolve());

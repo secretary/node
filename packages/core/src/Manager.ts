@@ -1,15 +1,49 @@
 import 'source-map-support/register';
 
-import {AbstractAdapter, InvalidKeyError, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from './';
+import {AbstractAdapter, OptionsInterface, Secret, SecretValueType} from './';
 
 /**
  * Secrets Manager class.
  */
-export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
-    /**
-     * @param {AbstractAdapter} adapter
-     */
-    public constructor(public readonly adapter: T) {
+export default class Manager {
+    public constructor(private adapters: Record<string, AbstractAdapter> = {}) {
+    }
+
+    private get default(): AbstractAdapter {
+        const keys = Object.keys(this.adapters);
+        if (keys.length < 1) {
+            return undefined;
+        }
+
+        return this.adapters.default || this.adapters[keys[0]];
+    }
+
+    public getAdapter(name: string): AbstractAdapter {
+        return this.adapters[name];
+    }
+
+    public getDefaultAdapter(): AbstractAdapter {
+        return this.default;
+    }
+
+    public addAdapter(name: string, adapter: AbstractAdapter): this {
+        if (this.adapters[name]) {
+            throw new Error('Adapter with that name already exists');
+        }
+
+        this.adapters[name] = adapter;
+
+        return this;
+    }
+
+    public removeAdapter(name: string): this {
+        if (!this.adapters[name]) {
+            throw new Error('Adapter with that name does not exist.');
+        }
+
+        delete this.adapters[name];
+
+        return this;
     }
 
     /**
@@ -21,14 +55,16 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      * @throws {InvalidKeyError} When the key is invalid.
      * @throws {SecretNotFoundError} When the secret cannot be found
      * @param {string} key
+     * @param {string} source
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async getSecret<V extends SecretValueType = any>(
+    public async getSecret<V extends SecretValueType = SecretValueType>(
         key: string,
+        source: string = 'default',
         options?: OptionsInterface,
     ): Promise<Secret<V>> {
-        return this.adapter.getSecret<V>(key, options);
+        return this.adapters[source].getSecret<V>(key, options);
     }
 
     /**
@@ -40,14 +76,16 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      *
      * @throws {InvalidKeyError} When the key is invalid.
      * @param {Secret} secret
+     * @param {string} source
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async putSecret<V extends SecretValueType = any>(
+    public async putSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
+        source: string = 'default',
         options?: OptionsInterface,
     ): Promise<Secret<V>> {
-        return this.adapter.putSecret<V>(secret, options);
+        return this.adapters[source].putSecret<V>(secret, options);
     }
 
     /**
@@ -59,14 +97,16 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      * @throws {InvalidKeyError} When the key is invalid.
      * @throws {SecretNotFoundError} When the secret cannot be found
      * @param {Secret} secret
+     * @param {string} source
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecret<V extends SecretValueType = any>(
+    public async deleteSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
+        source: string = 'default',
         options?: OptionsInterface,
     ): Promise<void> {
-        return this.adapter.deleteSecret(secret, options);
+        return this.adapters[source].deleteSecret(secret, options);
     }
 
     /**
@@ -78,12 +118,13 @@ export default class Manager<T extends AbstractAdapter = AbstractAdapter> {
      * @throws {InvalidKeyError} When the key is invalid.
      * @throws {SecretNotFoundError} When the secret cannot be found
      * @param {string} key
+     * @param {string} source
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecretByKey(key: string, options?: OptionsInterface): Promise<void> {
-        const secret = await this.getSecret(key, options);
+    public async deleteSecretByKey(key: string, source: string = 'default', options?: OptionsInterface): Promise<void> {
+        const secret = await this.getSecret(key, source, options);
 
-        return this.adapter.deleteSecret(secret, options);
+        return this.adapters[source].deleteSecret(secret, options);
     }
 }

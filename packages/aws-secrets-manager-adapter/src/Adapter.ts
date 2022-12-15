@@ -1,17 +1,28 @@
+import {
+    CreateSecretRequest,
+    GetSecretValueRequest,
+    SecretsManager,
+    UpdateSecretRequest,
+} from '@aws-sdk/client-secrets-manager';
 import {AbstractAdapter, OptionsInterface, Secret, SecretNotFoundError, SecretValueType} from '@secretary/core';
-import {SecretsManager} from 'aws-sdk';
-import {CreateSecretRequest, UpdateSecretRequest} from 'aws-sdk/clients/secretsmanager';
+
+export interface GetSecretOptions {
+    versionId?: string;
+    versionStage?: string;
+}
+
+export type PutSecretOptions = UpdateSecretRequest & CreateSecretRequest;
 
 export default class Adapter extends AbstractAdapter {
     public constructor(private readonly client: SecretsManager) {
         super();
     }
 
-    public async getSecret<V extends SecretValueType = any>(
+    public async getSecret<V extends SecretValueType = SecretValueType>(
         key: string,
-        options: OptionsInterface = {},
+        options: GetSecretOptions = {},
     ): Promise<Secret<V>> {
-        const params: SecretsManager.GetSecretValueRequest = {SecretId: key};
+        const params: GetSecretValueRequest = {SecretId: key};
         if (options.versionId) {
             params.VersionId = options.versionId;
         }
@@ -20,16 +31,17 @@ export default class Adapter extends AbstractAdapter {
         }
 
         try {
-            const data                        = await this.client.getSecretValue(params).promise();
+            const data = await this.client.getSecretValue(params);
             const {SecretString, ...metadata} = data;
 
-            let secretValue = SecretString;
+            let secretValue: V = SecretString as V;
             try {
-                secretValue = JSON.parse(SecretString);
+                secretValue = JSON.parse(SecretString) as V;
             } finally {
-                return new Secret<V>(key, secretValue as any, metadata);
+                return new Secret<V>(key, secretValue, metadata);
             }
         } catch (e) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             if (e.code === 'ResourceNotFoundException') {
                 throw new SecretNotFoundError(key);
             }
@@ -38,39 +50,44 @@ export default class Adapter extends AbstractAdapter {
         }
     }
 
-    public async putSecret<V extends SecretValueType = any>(
+    public async putSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
-        options: OptionsInterface = {},
+        options: Omit<PutSecretOptions, 'SecretString' | 'SecretId' | 'Name'> = {},
     ): Promise<Secret<V>> {
-        options.SecretString = typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value);
+        const opts: PutSecretOptions = {
+            SecretString: typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value),
+            SecretId:     secret.key,
+            Name:         secret.key,
+            ...options,
+        };
 
         try {
-            options.SecretId        = secret.key;
-            const {Tags, ...params} = options;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const {Name, Tags, ...params} = opts;
 
-            let response = await this.client.updateSecret(params as UpdateSecretRequest).promise();
+            let response = await this.client.updateSecret(params as UpdateSecretRequest);
             if (Tags !== undefined) {
-                const tagResponse = await this.client.tagResource({SecretId: secret.key, Tags}).promise();
-                response          = {...response, ...tagResponse};
+                const tagResponse = await this.client.tagResource({SecretId: secret.key, Tags});
+                response = {...response, ...tagResponse};
             }
 
             return secret.withMetadata(response);
         } catch (e) {
-            options.Name = secret.key;
-            delete options.SecretId;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const {SecretId, ...params} = opts;
 
-            const response = await this.client.createSecret(options as CreateSecretRequest).promise();
+            const response = await this.client.createSecret(params as CreateSecretRequest);
 
             return secret.withMetadata(response);
         }
     }
 
-    public async deleteSecret<V extends SecretValueType = any>(
+    public async deleteSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
         options: OptionsInterface = {},
     ): Promise<void> {
         try {
-            await this.client.deleteSecret({...options, SecretId: secret.key}).promise();
+            await this.client.deleteSecret({...options, SecretId: secret.key});
         } catch (e) {
             throw new SecretNotFoundError(secret.key);
         }

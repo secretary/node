@@ -10,7 +10,7 @@
     "typings": "dist/index.d.ts",
     "scripts": {
         "build": "tsc --project tsconfig.json",
-        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
+        "lint": "eslint --fix --config=eslint.json src",
         "test": "nyc mocha",
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
     },
@@ -35,15 +35,20 @@
         "access": "public"
     },
     "dependencies": {
-        "@secretary/core": "^3.0.1",
-        "@types/chai-as-promised": "^7.1.0",
-        "chai-as-promised": "^7.1.1",
-        "mock-fs": "^4.9.0",
-        "typemoq": "^2.1.0"
+        "@secretary/core": "^3.0.1"
     },
     "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
     "devDependencies": {
-        "@types/mock-fs": "^3.6.30",
-        "mock-fs": "^4.9.0"
+        "@types/chai-as-promised": "^7.1.5",
+        "@types/eslint": "^8.4.10",
+        "@types/mock-fs": "^4.13.1",
+        "@typescript-eslint/eslint-plugin": "^5.46.1",
+        "@typescript-eslint/parser": "^5.46.1",
+        "chai-as-promised": "^7.1.1",
+        "eslint": "^8.29.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.26.0",
+        "mock-fs": "^5.2.0",
+        "typemoq": "^2.1.0"
     }
 }

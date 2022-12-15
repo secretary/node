@@ -1,1 +1,1 @@
-export {default as Adapter} from './Adapter';
+export {default as Adapter, GetSecretOptions, PutSecretOptions} from './Adapter';

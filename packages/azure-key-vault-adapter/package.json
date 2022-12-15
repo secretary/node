@@ -10,7 +10,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc --project tsconfig.json",
-        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
+        "lint": "eslint --fix --config=eslint.json src",
         "test": "nyc mocha",
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
         "prepublishOnly": "npm run build"
@@ -38,12 +38,18 @@
     "dependencies": {
         "@secretary/core": "^3.0.1",
         "azure-keyvault": "^3.0.4",
-        "ms-rest-azure": "^2.6.0"
+        "ms-rest-azure": "3.0.2"
     },
     "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
     "devDependencies": {
-        "@types/chai-as-promised": "^7.1.0",
+        "@types/chai-as-promised": "^7.1.5",
+        "@types/eslint": "^8.4.10",
+        "@typescript-eslint/eslint-plugin": "^5.46.1",
+        "@typescript-eslint/parser": "^5.46.1",
         "chai-as-promised": "^7.1.1",
+        "eslint": "^8.29.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.26.0",
         "typemoq": "^2.1.0"
     }
 }

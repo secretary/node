@@ -1,17 +1,16 @@
+import {SecretsManager} from '@aws-sdk/client-secrets-manager';
 import AdapterTest from '@secretary/core/dist/AdapterTest';
-import * as AWS from 'aws-sdk';
 import {use} from 'chai';
 import 'mocha';
 import * as sinonChai from 'sinon-chai';
 import * as TypeMoq from 'typemoq';
+import Adapter from './Adapter';
 
 const {isValue} = TypeMoq.It;
 
-import Adapter from './Adapter';
-
 use(sinonChai);
 
-const mock = TypeMoq.Mock.ofInstance(new AWS.SecretsManager({}), TypeMoq.MockBehavior.Strict);
+const mock = TypeMoq.Mock.ofInstance(new SecretsManager({}), TypeMoq.MockBehavior.Strict);
 
 const getAdapter: any = () => new Adapter(mock.object);
 
@@ -23,50 +22,47 @@ const response = (data?: any): any => {
         data = {SecretString: data};
     }
 
-    return {
-        promise: () => Promise.resolve(data),
-    };
+    return data;
 };
 
 const reject = (): any => {
-    return {promise: () => Promise.reject({code: 'ResourceNotFoundException'})};
+    const err: any = new Error();
+    err.code = 'ResourceNotFoundException';
+
+    throw err;
 };
 
 AdapterTest(
     'src/Adapter.ts',
     getAdapter,
     {
-        constructor:  (_) => {
+        constructor: (_) => {
         },
-        getSecret:    (_: Adapter, exp: any[]) => {
+        getSecret: (_: Adapter, exp: any[]) => {
             mock
                 .setup((x) => x.getSecretValue(isValue({SecretId: exp[0][0]}), TypeMoq.It.isAny()))
                 .returns(() => response(exp[0][1].value));
-
             mock
                 .setup((x) => x.getSecretValue(isValue({SecretId: exp[1][0]}), TypeMoq.It.isAny()))
                 .returns(() => response(JSON.stringify(exp[1][1].value)));
-
             mock
                 .setup((x) => x.getSecretValue(isValue({SecretId: exp[2][0]}), TypeMoq.It.isAny()))
                 .returns(() => reject());
 
         },
-        putSecret:    (_: Adapter, exp: any[]) => {
+        putSecret: (_: Adapter, exp: any[]) => {
             mock
                 .setup((x) => x.updateSecret(isValue({SecretId: exp[0][0].key, SecretString: exp[0][0].value})))
                 .returns(() => reject());
             mock
                 .setup((x) => x.createSecret(isValue({Name: exp[0][0].key, SecretString: exp[0][0].value})))
                 .returns(() => response({}));
-
             mock
                 .setup((x) => x.updateSecret(isValue({SecretId: exp[1][0].key, SecretString: exp[1][0].value})))
                 .returns(() => reject());
             mock
                 .setup((x) => x.createSecret(isValue({Name: exp[1][0].key, SecretString: exp[1][0].value})))
                 .returns(() => response({}));
-
             mock
                 .setup((x) => x.updateSecret(isValue({SecretId: exp[1][0].key, SecretString: exp[1][1]})))
                 .returns(() => response({}));

@@ -4,13 +4,13 @@
     "version": "3.0.1",
     "repository": {
         "type": "github",
-        "url": "https://github.com/secretarysecrets/node"
+        "url": "https://github.com/secretary/node"
     },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc --project tsconfig.json",
-        "lint": "tslint --config tslint.json --project tsconfig.json -t stylish --fix",
+        "lint": "eslint --fix --config=eslint.json src",
         "test": "nyc mocha",
         "prepare": "npm run build",
         "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
@@ -36,18 +36,21 @@
         "access": "public"
     },
     "dependencies": {
-        "@types/chai-as-promised": "^7.1.0",
-        "chai-as-promised": "^7.1.1",
-        "lru-cache": "^5.1.1",
-        "source-map-support": "^0.5.11",
-        "typemoq": "^2.1.0"
+        "lru-cache": "7.14.1",
+        "source-map-support": "0.5.21"
     },
     "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
     "devDependencies": {
-        "@types/chai-as-promised": "^7.1.0",
-        "@types/lru-cache": "^5.1.0",
-        "@types/source-map-support": "^0.5.0",
+        "@types/chai-as-promised": "^7.1.5",
+        "@types/eslint": "^8.4.10",
+        "@types/lru-cache": "^7.10.10",
+        "@types/source-map-support": "^0.5.6",
+        "@typescript-eslint/eslint-plugin": "^5.46.1",
+        "@typescript-eslint/parser": "^5.46.1",
         "chai-as-promised": "^7.1.1",
+        "eslint": "^8.29.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.26.0",
         "typemoq": "^2.1.0"
     }
 }

@@ -20,7 +20,7 @@ $ npm install -g @secretary/cli
 $ secretary COMMAND
 running command...
 $ secretary (--version)
-@secretary/cli/0.0.0 darwin-x64 node-v18.12.1
+@secretary/cli/4.0.0-alpha.0 darwin-x64 node-v18.12.1
 $ secretary --help [COMMAND]
 USAGE
   $ secretary COMMAND
@@ -29,8 +29,6 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`secretary hello PERSON`](#secretary-hello-person)
-* [`secretary hello world`](#secretary-hello-world)
 * [`secretary help [COMMAND]`](#secretary-help-command)
 * [`secretary plugins`](#secretary-plugins)
 * [`secretary plugins:install PLUGIN...`](#secretary-pluginsinstall-plugin)
@@ -41,46 +39,6 @@ USAGE
 * [`secretary plugins:uninstall PLUGIN...`](#secretary-pluginsuninstall-plugin-1)
 * [`secretary plugins:uninstall PLUGIN...`](#secretary-pluginsuninstall-plugin-2)
 * [`secretary plugins update`](#secretary-plugins-update)
-
-## `secretary hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ secretary hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [dist/commands/hello/index.ts](https://github.com/secretary/node/blob/v0.0.0/dist/commands/hello/index.ts)_
-
-## `secretary hello world`
-
-Say hello world
-
-```
-USAGE
-  $ secretary hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ secretary hello world
-  hello world! (./src/commands/hello/world.ts)
-```
 
 ## `secretary help [COMMAND]`
 
@@ -100,7 +58,7 @@ DESCRIPTION
   Display help for secretary.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.19/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.20/src/commands/help.ts)_
 
 ## `secretary plugins`
 
@@ -120,7 +78,7 @@ EXAMPLES
   $ secretary plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.7/src/commands/plugins/index.ts)_
+_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.8/src/commands/plugins/index.ts)_
 
 ## `secretary plugins:install PLUGIN...`
 

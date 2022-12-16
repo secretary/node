@@ -1,7 +1,7 @@
 # Secretary - NodeJS Secrets Management
 
-[![Build Status](https://travis-ci.org/secretarysecrets/node.svg?branch=master)](https://travis-ci.org/secretarysecrets/node)
-[![codecov](https://codecov.io/gh/secretarysecrets/node/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node)
+[![Build Status](https://travis-ci.org/secretary/node.svg?branch=master)](https://travis-ci.org/secretary/node)
+[![codecov](https://codecov.io/gh/secretary/node/branch/master/graph/badge.svg)](https://codecov.io/gh/secretary/node)
 
 ___
 
@@ -18,10 +18,10 @@ Currently supports the following adapters:
 
 ```bash
 // If you want to use AWS Secrets Manager
-$ npm install @secretary/core @secretary/aws-secrets-manager
+$ npm install @secretary/core @secretary/aws-secrets-manager-adapter
 
 // If you want to use Hashicorp Vault
-$ npm install @secretary/core @secretary/vault
+$ npm install @secretary/core @secretary/hashicorp-vault-adapter
 ```
 
 Check the install docs of the adapter you want to use for specific instructions.
@@ -30,21 +30,41 @@ Check the install docs of the adapter you want to use for specific instructions.
 
 ```typescript
 import {Manager} from '@secretary/core';
-import Adapter from '@secretary/aws-secrets-manager';
+import {Adapter} from '@secretary/aws-secrets-manager-adapter';
 import {SecretsManager} from 'aws-sdk';
 
 const manager = new Manager({
     aws: new Adapter({client: new SecretsManager()})
 });
 
-async function main() {
-    const someSecret = await manager.getSecret('some/database/secret', 'aws');
-    // or, aws as the first (and only) adapter in the manager, `default` is another key that works,
-    // which is what source getSecret defaults to
-    const someSecret = await manager.getSecret('some/database/secret');
+```
 
-    console.log(someSecret.value.dsn); // redis://localhost:6379
-}
+### Fetch Secrets
+
+```typescript
+const someSecret = await manager.getSecret('some/database/secret', 'aws');
+// or, aws as the first (and only) adapter in the manager, `default` is another key that works,
+// which is what source getSecret defaults to
+const someSecret = await manager.getSecret('some/database/secret');
+
+console.log(someSecret.value.dsn); // redis://localhost:6379
+```
+
+### Create Secrets
+
+```typescript
+const secret = new Secret('some/database/secret', {dsn: 'redis://localhost:6379'});
+await manager.putSecret(secret, 'aws');
+
+console.log(someSecret.value.dsn); // redis://localhost:6379
+```
+
+### Delete Secrets
+
+```typescript
+const secret = await manager.getSecret('some/database/secret');
+
+await manager.deleteSecret(secret, 'aws');
 ```
 
 Check the usage docs of the adapter you want to use for specific instructions.

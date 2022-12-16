@@ -1,6 +1,6 @@
 {
   "name": "@secretary/cli",
-  "version": "4.0.0-alpha.1",
+  "version": "4.0.0",
   "description": "Secretary CLI",
   "author": "Secretary",
   "bin": {
@@ -19,7 +19,7 @@
   "dependencies": {
     "@oclif/core": "^1.21.0",
     "@oclif/plugin-help": "^5",
-    "@secretary/core": "^4.0.0-alpha.1",
+    "@secretary/core": "^4.0.0",
     "execa": "5",
     "yup": "1.0.0-beta.8"
   },

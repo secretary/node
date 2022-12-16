@@ -34,6 +34,7 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-jsdoc": "^39.6.4",
+        "eslint-plugin-unicorn": "^45.0.2",
         "lerna": "^6.1.0",
         "mocha": "10.2.0",
         "ms-rest-azure": "3.0.2",

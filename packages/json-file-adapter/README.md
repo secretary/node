@@ -6,50 +6,19 @@ This is the JSON File adapter for [Secretary](https://github.com/secretarysecret
 
 This adapter does NOT use any encryption. It should ***NOT*** be used in production.
 
-## Installation 
+## Installation
 
 ```bash
-$ npm install @secretary/core @secretary/json-file
+$ npm install @secretary/core @secretary/json-file-adapter
 ```
 
 ## Usage
 
 ### Creating the manager
-```typescript
-import {Adapter, Secretary} from '@secretary/json-file';
-
-const manager = new Secretary(new Adapter({file: '../path/to/my/secrets'}));
-```
-
-### Fetching a secret
 
 ```typescript
-const someSecret = await manager.getSecret({path: 'databases/redis', key: 'dsn'});
-console.log(someSecret); // redis://localhost:6379
-```
+import {Manager} from '@secretary/core';
+import {Adapter} from '@secretary/hashicorp-vault-adapter';
 
-### Fetching a secret path
-
-```typescript
-const someSecrets = await manager.getSecrets({path: 'databases/redis'});
-console.log(someSecrets); // {dsn: 'redis://localhost:6379', auth: 'foo'}
-```
-
-### Create / Update a secret
-
-```typescript
-await manager.putSecret({path: 'databases/redis', key: 'dsn', value: 'redis://localhost:6379'});
-await manager.putSecret({path: 'databases/redis', key: 'auth', value: 'foo'});
-```
-
-### Create / Update multiple secrets
-
-> Note, this fires off a request for every secret that you send. 
-
-
-```typescript
-await manager.putSecrets([
-    {path: 'databases/redis', key: 'dsn', value: 'redis://localhost:6379'},
-    {path: 'databases/redis', key: 'auth', value: 'foo'},
-]);
+const manager = new Manager({file: new Adapter({file: '../path/to/my/secrets'})});
 ```

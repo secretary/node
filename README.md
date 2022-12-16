@@ -39,16 +39,6 @@ async function main() {
     const someSecret = await manager.getSecret('database/redis/main');
 
     console.log(someSecret);
-    /*
-    Secret {
-        key: 'database/redis/main'
-        value: {
-            host: 'localhost',
-            port: 6379
-        },
-        metadata: // Metadata from the adapter
-    }
-    */
 }
 ```
 

@@ -1,4 +1,5 @@
-# Secretary - NodeJS Secrets Management 
+# Secretary - NodeJS Secrets Management
+
 [![Build Status](https://travis-ci.org/secretarysecrets/node.svg?branch=master)](https://travis-ci.org/secretarysecrets/node)
 [![codecov](https://codecov.io/gh/secretarysecrets/node/branch/master/graph/badge.svg)](https://codecov.io/gh/secretarysecrets/node)
 
@@ -13,7 +14,7 @@ Currently supports the following adapters:
 * [Hashicorp Vault](https://github.com/secretary/node/tree/master/packages/hashicorp-vault-adater)
 * [JSON File](https://github.com/secretary/node/tree/master/packages/json-file-adapter)
 
-## Installation 
+## Installation
 
 ```bash
 // If you want to use AWS Secrets Manager
@@ -28,18 +29,21 @@ Check the install docs of the adapter you want to use for specific instructions.
 ## Usage
 
 ```typescript
-import Secretary from '@secretary/core';
+import {Manager} from '@secretary/core';
 import Adapter from '@secretary/aws-secrets-manager';
 import {SecretsManager} from 'aws-sdk';
 
-const manager = new Secretary({
-    adapter: new Adapter({client: new SecretsManager()})
+const manager = new Manager({
+    aws: new Adapter({client: new SecretsManager()})
 });
 
 async function main() {
-    const someSecret = await manager.getSecret({key: 'host', path: 'database/redis/main'});
-    
-    console.log(someSecret); // redis://localhost:6379
+    const someSecret = await manager.getSecret('some/database/secret', 'aws');
+    // or, aws as the first (and only) adapter in the manager, `default` is another key that works,
+    // which is what source getSecret defaults to
+    const someSecret = await manager.getSecret('some/database/secret');
+
+    console.log(someSecret.value.dsn); // redis://localhost:6379
 }
 ```
 

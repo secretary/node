@@ -3029,7 +3029,7 @@ __metadata:
   resolution: "@secretary/aws-secrets-manager-adapter@workspace:packages/aws-secrets-manager-adapter"
   dependencies:
     "@aws-sdk/client-secrets-manager": ^3.229.0
-    "@secretary/core": ^4.0.0-alpha.0
+    "@secretary/core": ^4.0.0
     "@types/chai-as-promised": ^7.1.5
     "@types/eslint": ^8.4.10
     "@typescript-eslint/eslint-plugin": ^5.46.1
@@ -3048,7 +3048,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@secretary/azure-key-vault-adapter@workspace:packages/azure-key-vault-adapter"
   dependencies:
-    "@secretary/core": ^4.0.0-alpha.0
+    "@secretary/core": ^4.0.0
     "@types/chai-as-promised": ^7.1.5
     "@types/eslint": ^8.4.10
     "@typescript-eslint/eslint-plugin": ^5.46.1
@@ -3070,7 +3070,7 @@ __metadata:
     "@oclif/core": ^1.21.0
     "@oclif/plugin-help": ^5
     "@oclif/test": ^2.2.13
-    "@secretary/core": 4.0.0-alpha.0
+    "@secretary/core": ^4.0.0
     "@types/chai": ^4
     "@types/eslint": ^8.4.10
     "@types/mocha": ^9.0.0
@@ -3092,7 +3092,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@secretary/core@4.0.0-alpha.0, @secretary/core@^4.0.0-alpha.0, @secretary/core@workspace:packages/core":
+"@secretary/core@^4.0.0, @secretary/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@secretary/core@workspace:packages/core"
   dependencies:
@@ -3116,7 +3116,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@secretary/hashicorp-vault-adapter@workspace:packages/hashicorp-vault-adapter"
   dependencies:
-    "@secretary/core": ^4.0.0-alpha.0
+    "@secretary/core": ^4.0.0
     "@types/chai-as-promised": ^7.1.5
     "@types/eslint": ^8.4.10
     "@types/node-vault": ^0.9.13
@@ -3137,7 +3137,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@secretary/json-file-adapter@workspace:packages/json-file-adapter"
   dependencies:
-    "@secretary/core": ^4.0.0-alpha.0
+    "@secretary/core": ^4.0.0
     "@types/chai-as-promised": ^7.1.5
     "@types/eslint": ^8.4.10
     "@types/mock-fs": ^4.13.1

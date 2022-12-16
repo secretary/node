@@ -28,7 +28,8 @@ module.exports = {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "tsconfig.json",
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaVersion": "es2022"
     },
     "plugins": [
         "eslint-plugin-jsdoc",

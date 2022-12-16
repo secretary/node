@@ -29,9 +29,11 @@ jobs:
                     - macos-latest
                     - windows-latest
                 node_version:
-                    - 12
                     - 14
                     - 16
+                    - 18
+                    - 19
+                    - 20
                 architecture:
                     - x64
                 # an extra windows-x86 run:

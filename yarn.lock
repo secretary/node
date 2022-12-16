@@ -3119,7 +3119,6 @@ __metadata:
     "@secretary/core": ^4.0.0
     "@types/chai-as-promised": ^7.1.5
     "@types/eslint": ^8.4.10
-    "@types/node-vault": ^0.9.13
     "@typescript-eslint/eslint-plugin": ^5.46.1
     "@typescript-eslint/parser": ^5.46.1
     chai-as-promised: ^7.1.1
@@ -3163,7 +3162,6 @@ __metadata:
     "@types/eslint": ^8.4.10
     "@types/mocha": 10.0.1
     "@types/node": 18.11.14
-    "@types/node-vault": 0.9.13
     "@types/nodecredstash": ^2.0.0
     "@types/sinon": ^10.0.13
     "@types/sinon-chai": ^3.2.2
@@ -3467,15 +3465,6 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: a5fcf8212daa270e6aa560019a4bd28a66e6fa49c55c1373746d5894f4aa1aafa5588335194953cf014de3c77df6be67a041fb6638ead7124307370985880b6c
-  languageName: node
-  linkType: hard
-
-"@types/node-vault@npm:0.9.13, @types/node-vault@npm:^0.9.13":
-  version: 0.9.13
-  resolution: "@types/node-vault@npm:0.9.13"
-  dependencies:
-    node-vault: "*"
-  checksum: 598713fdad9e2d9fa389bd6d5bc31767f492b455ff2eaa61b99ade667e312b656c39521d88167deb2e653cb653283a17e5989583c501aa5e1ef8fdd3a85946bc
   languageName: node
   linkType: hard
 
@@ -9515,7 +9504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-vault@npm:*, node-vault@npm:^0.9.8, node-vault@npm:^0.9.9":
+"node-vault@npm:^0.9.8, node-vault@npm:^0.9.9":
   version: 0.9.22
   resolution: "node-vault@npm:0.9.22"
   dependencies:

@@ -33,7 +33,7 @@ jobs:
                     - 16
                     - 18
                     - 19
-                    - 20
+                    - 20hashhas
                 architecture:
                     - x64
                 # an extra windows-x86 run:
@@ -48,7 +48,7 @@ jobs:
                 with:
                     node-version: '18'
                     cache: 'yarn'
-            -   run: yarn install --frozen-lockfile
+            -   run: yarn install
             -   name: Run Build
                 run: yarn build
             -   name: Run Lint

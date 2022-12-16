@@ -1,5 +1,5 @@
 export type SecretValueType = string | Record<string, string>;
-export type MetadataType = Record<string, string | number | boolean>;
+export type MetadataType = any;
 
 export default class Secret<Value extends SecretValueType = SecretValueType> {
     public constructor(

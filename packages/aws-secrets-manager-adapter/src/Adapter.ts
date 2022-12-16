@@ -56,8 +56,8 @@ export default class Adapter extends AbstractAdapter {
     ): Promise<Secret<V>> {
         const opts: PutSecretOptions = {
             SecretString: typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value),
-            SecretId:     secret.key,
-            Name:         secret.key,
+            SecretId: secret.key,
+            Name: secret.key,
             ...options,
         };
 
@@ -71,14 +71,14 @@ export default class Adapter extends AbstractAdapter {
                 response = {...response, ...tagResponse};
             }
 
-            return secret.withMetadata(response);
+            return secret.withMetadata(response.$metadata);
         } catch (e) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const {SecretId, ...params} = opts;
 
             const response = await this.client.createSecret(params as CreateSecretRequest);
 
-            return secret.withMetadata(response);
+            return secret.withMetadata(response.$metadata);
         }
     }
 

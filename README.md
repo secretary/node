@@ -1,10 +1,10 @@
 # Secretary - NodeJS Secrets Management
 
-[![Build Stats](https://img.shields.io/travis/secretary/node.svg?style=for-the-badge)](https://travis-ci.org/secretary/node)
+[![Build Stats](https://img.shields.io/github/actions/workflow/status/secretary/node/monorepo?branch=master&style=for-the-badge)](https://github.com/secretary/node)
 [![codecov](https://img.shields.io/codecov/c/github/secretary/node?style=for-the-badge)](https://codecov.io/gh/secretary/node)
 
 [![Downloads/week](https://img.shields.io/npm/dm/@secretary/core?style=for-the-badge)](https://npmjs.org/package/secretary/node)
-[![License](https://img.shields.io/npm/l/@secretary/core.svg?style=for-the-badge)](https://github.com/secretary/node/blob/main/package.json)
+[![License](https://img.shields.io/npm/l/@secretary/core.svg?style=for-the-badge)](https://github.com/secretary/node/blob/master/package.json)
 
 ___
 

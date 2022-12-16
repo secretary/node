@@ -21,8 +21,25 @@ concurrency:
 
 jobs:
     install-dependencies:
-        name: Install Dependencies
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os:
+                    - ubuntu-latest
+                    - macos-latest
+                    - windows-latest
+                node_version:
+                    - 12
+                    - 14
+                    - 16
+                architecture:
+                    - x64
+                # an extra windows-x86 run:
+                include:
+                    -   os: windows-2016
+                        node_version: 12
+                        architecture: x86
+        name: Node ${{ matrix.node_version }} - ${{ matrix.architecture }} on ${{ matrix.os }}
         steps:
             -   uses: actions/checkout@v3
             -   uses: actions/setup-node@v3
@@ -30,6 +47,10 @@ jobs:
                     node-version: '18'
                     cache: 'yarn'
             -   run: yarn install --frozen-lockfile
+            -   name: Run Build
+                run: yarn build
+            -   name: Run Lint
+                run: yarn lint
 
     ci-lint:
         name: Monorepo CI - Lint
@@ -51,31 +72,5 @@ jobs:
                 run: yarn build
             -   name: Run Lint
                 run: yarn lint
-
-    ci-tests:
-        name: Monorepo CI - Tests
-        runs-on: ubuntu-latest
-        needs: install-dependencies
-        steps:
-            -   name: Checkout Branch
-                uses: actions/checkout@v3
-                with:
-                    fetch-depth: 0
-            -   uses: actions/setup-node@v3
-                with:
-                    node-version-file: 'package.json'
-                    cache: 'yarn'
-            -   name: Install Dependencies
-                run: yarn install --frozen-lockfile
-            -   name: Run Build
-                run: yarn build:affected
             -   name: Run Tests
-                run: yarn test:affected
-            -   name: Create final coverage report
-                run: yarn test:coverage:report
-            -   name: Upload Coverage Artifacts
-                uses: actions/upload-artifact@v3
-                with:
-                    name: coverage-artifact
-                    retention-days: 1
-                    path: coverage/lcov.info
+                run: yarn test

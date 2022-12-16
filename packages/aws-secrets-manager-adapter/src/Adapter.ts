@@ -56,8 +56,8 @@ export default class Adapter extends AbstractAdapter {
     ): Promise<Secret<V>> {
         const opts: PutSecretOptions = {
             SecretString: typeof secret.value === 'string' ? secret.value : JSON.stringify(secret.value),
-            SecretId: secret.key,
-            Name: secret.key,
+            SecretId:     secret.key,
+            Name:         secret.key,
             ...options,
         };
 

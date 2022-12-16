@@ -61,7 +61,7 @@ export default class Manager {
      */
     public async getSecret<V extends SecretValueType = SecretValueType>(
         key: string,
-        source: string = 'default',
+        source = 'default',
         options?: OptionsInterface,
     ): Promise<Secret<V>> {
         return this.adapters[source].getSecret<V>(key, options);
@@ -82,7 +82,7 @@ export default class Manager {
      */
     public async putSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
-        source: string = 'default',
+        source = 'default',
         options?: OptionsInterface,
     ): Promise<Secret<V>> {
         return this.adapters[source].putSecret<V>(secret, options);
@@ -103,7 +103,7 @@ export default class Manager {
      */
     public async deleteSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
-        source: string = 'default',
+        source = 'default',
         options?: OptionsInterface,
     ): Promise<void> {
         return this.adapters[source].deleteSecret(secret, options);
@@ -122,7 +122,7 @@ export default class Manager {
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecretByKey(key: string, source: string = 'default', options?: OptionsInterface): Promise<void> {
+    public async deleteSecretByKey(key: string, source = 'default', options?: OptionsInterface): Promise<void> {
         const secret = await this.getSecret(key, source, options);
 
         return this.adapters[source].deleteSecret(secret, options);

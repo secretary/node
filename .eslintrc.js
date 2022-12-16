@@ -15,7 +15,8 @@ module.exports = {
     "ignorePatterns": ["**/*Test.ts", "**/*.spec.ts"],
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "es2021": true
     },
     "extends": [
         "plugin:@typescript-eslint/recommended",

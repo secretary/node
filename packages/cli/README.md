@@ -30,15 +30,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`secretary help [COMMAND]`](#secretary-help-command)
-* [`secretary plugins`](#secretary-plugins)
-* [`secretary plugins:install PLUGIN...`](#secretary-pluginsinstall-plugin)
-* [`secretary plugins:inspect PLUGIN...`](#secretary-pluginsinspect-plugin)
-* [`secretary plugins:install PLUGIN...`](#secretary-pluginsinstall-plugin-1)
-* [`secretary plugins:link PLUGIN`](#secretary-pluginslink-plugin)
-* [`secretary plugins:uninstall PLUGIN...`](#secretary-pluginsuninstall-plugin)
-* [`secretary plugins:uninstall PLUGIN...`](#secretary-pluginsuninstall-plugin-1)
-* [`secretary plugins:uninstall PLUGIN...`](#secretary-pluginsuninstall-plugin-2)
-* [`secretary plugins update`](#secretary-plugins-update)
+* [`secretary inject COMMAND`](#secretary-inject-command)
 
 ## `secretary help [COMMAND]`
 
@@ -60,233 +52,28 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.20/src/commands/help.ts)_
 
-## `secretary plugins`
+## `secretary inject COMMAND`
 
-List installed plugins.
+Inject secrets into the environment of the given command
 
 ```
 USAGE
-  $ secretary plugins [--core]
+  $ secretary inject [COMMAND] [-c <value>]
+
+ARGUMENTS
+  COMMAND  Command to run
 
 FLAGS
-  --core  Show core plugins.
+  -c, --config=<value>  [default: /Users/aaron/projects/secretary/node/packages/cli/.secretaryrc.js] SecretaryConfig
+                        file to read mapping from
 
 DESCRIPTION
-  List installed plugins.
+  Inject secrets into the environment of the given command
 
 EXAMPLES
-  $ secretary plugins
+  $ secretary inject yarn build
+  // output from yarn build
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.8/src/commands/plugins/index.ts)_
-
-## `secretary plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ secretary plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-
-ALIASES
-  $ secretary plugins add
-
-EXAMPLES
-  $ secretary plugins:install myplugin 
-
-  $ secretary plugins:install https://github.com/someuser/someplugin
-
-  $ secretary plugins:install someuser/someplugin
-```
-
-## `secretary plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
-
-```
-USAGE
-  $ secretary plugins:inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ secretary plugins:inspect myplugin
-```
-
-## `secretary plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ secretary plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-
-ALIASES
-  $ secretary plugins add
-
-EXAMPLES
-  $ secretary plugins:install myplugin 
-
-  $ secretary plugins:install https://github.com/someuser/someplugin
-
-  $ secretary plugins:install someuser/someplugin
-```
-
-## `secretary plugins:link PLUGIN`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ secretary plugins:link PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-
-EXAMPLES
-  $ secretary plugins:link myplugin
-```
-
-## `secretary plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ secretary plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ secretary plugins unlink
-  $ secretary plugins remove
-```
-
-## `secretary plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ secretary plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ secretary plugins unlink
-  $ secretary plugins remove
-```
-
-## `secretary plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ secretary plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ secretary plugins unlink
-  $ secretary plugins remove
-```
-
-## `secretary plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ secretary plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
+_See code: [dist/commands/inject/index.ts](https://github.com/secretary/node/blob/v4.0.0-alpha.0/dist/commands/inject/index.ts)_
 <!-- commandsstop -->

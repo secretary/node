@@ -1,7 +1,7 @@
 {
   "name": "@secretary/cli",
   "description": "Secretary CLI",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "author": "Secretary",
   "bin": {
     "secretary": "./bin/run"
@@ -10,7 +10,7 @@
   "dependencies": {
     "@oclif/core": "1.21.0",
     "@oclif/plugin-help": "5",
-    "@secretary/core": "^4.0.5",
+    "@secretary/core": "^4.0.6",
     "execa": "5",
     "yup": "1.0.0-beta.8"
   },
@@ -70,5 +70,5 @@
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts",
-  "gitHead": "7add094b62607294c9426f210a7d9b274ab4133b"
+  "gitHead": "c93155fcbe9666a90f19c175864e9f52c1223611"
 }

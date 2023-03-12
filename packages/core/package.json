@@ -1,7 +1,7 @@
 {
   "name": "@secretary/core",
   "description": "Secrets Manager for NodeJS",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "author": "Aaron Scherer <aequasi@gmail.com>",
   "dependencies": {
     "lru-cache": "7.14.1",
@@ -20,7 +20,7 @@
     "eslint-plugin-import": "2.26.0",
     "typemoq": "2.1.0"
   },
-  "gitHead": "c93155fcbe9666a90f19c175864e9f52c1223611",
+  "gitHead": "132096e6922b1633ecf6393eb83e6f6a7305978c",
   "license": "MIT",
   "main": "dist/index.js",
   "nyc": {

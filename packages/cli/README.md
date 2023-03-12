@@ -16,7 +16,7 @@ $ npm install -g @secretary/cli
 $ secretary COMMAND
 running command...
 $ secretary (--version)
-@secretary/cli/4.0.3 linux-x64 node-v18.12.1
+@secretary/cli/4.0.4 linux-x64 node-v18.12.1
 $ secretary --help [COMMAND]
 USAGE
   $ secretary COMMAND

@@ -1,10 +1,10 @@
 {
   "name": "@secretary/hashicorp-vault-adapter",
   "description": "Hashicorp Vault adapter for Secretary",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "author": "Aaron Scherer <aequasi@gmail.com>",
   "dependencies": {
-    "@secretary/core": "^4.0.3"
+    "@secretary/core": "^4.0.4"
   },
   "devDependencies": {
     "@types/chai-as-promised": "7.1.5",

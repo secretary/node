@@ -1,10 +1,10 @@
 {
   "name": "@secretary/azure-key-vault-adapter",
   "description": "Azure Key Vault adapter for Secretary",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "author": "Aaron Scherer <aequasi@gmail.com>",
   "dependencies": {
-    "@secretary/core": "^4.0.1",
+    "@secretary/core": "^4.0.2",
     "azure-keyvault": "3.0.4",
     "ms-rest-azure": "3.0.2"
   },

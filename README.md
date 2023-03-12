@@ -53,7 +53,10 @@ module.exports = async (manager) => ({
             name: 'BOT_TOKEN',
             secret: 'bot/development',
             property: 'token',
-            source: 'aws'
+            source: 'aws',
+            callback(value) {
+                return value.replace(/^Bot /, '');
+            }
         }
     ]
 })

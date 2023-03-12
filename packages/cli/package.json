@@ -1,7 +1,7 @@
 {
   "name": "@secretary/cli",
   "description": "Secretary CLI",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "author": "Secretary",
   "bin": {
     "secretary": "./bin/run"

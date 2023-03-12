@@ -2,18 +2,25 @@
   "name": "@secretary/hashicorp-vault-adapter",
   "description": "Hashicorp Vault adapter for Secretary",
   "version": "4.0.0",
-  "repository": {
-    "type": "github",
-    "url": "https://github.com/secretarysecrets/node-vault"
+  "author": "Aaron Scherer <aequasi@gmail.com>",
+  "dependencies": {
+    "@secretary/core": "4.0.0"
   },
+  "devDependencies": {
+    "@types/chai-as-promised": "7.1.5",
+    "@types/eslint": "8.4.10",
+    "@typescript-eslint/eslint-plugin": "5.46.1",
+    "@typescript-eslint/parser": "5.46.1",
+    "chai-as-promised": "7.1.1",
+    "eslint": "8.29.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "node-vault": "0.9.9",
+    "typemoq": "2.1.0"
+  },
+  "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
+  "license": "MIT",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "lint": "eslint --fix --config=eslint.json src",
-    "test": "nyc mocha",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov"
-  },
   "nyc": {
     "extension": [
       ".ts"
@@ -29,28 +36,18 @@
     ],
     "all": true
   },
-  "author": "Aaron Scherer <aequasi@gmail.com>",
-  "license": "MIT",
+  "peerDependencies": {
+    "node-vault": "0.9.9"
+  },
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@secretary/core": "^4.0.0"
+  "repository": "secretarysecrets/node-vault",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
+    "lint": "eslint --fix --config=eslint.json src",
+    "test": "nyc mocha"
   },
-  "peerDependencies": {
-    "node-vault": "^0.9.6"
-  },
-  "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
-  "devDependencies": {
-    "@types/chai-as-promised": "^7.1.5",
-    "@types/eslint": "^8.4.10",
-    "@typescript-eslint/eslint-plugin": "^5.46.1",
-    "@typescript-eslint/parser": "^5.46.1",
-    "chai-as-promised": "^7.1.1",
-    "eslint": "^8.29.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "node-vault": "^0.9.8",
-    "typemoq": "^2.1.0"
-  }
+  "types": "dist/index.d.ts"
 }

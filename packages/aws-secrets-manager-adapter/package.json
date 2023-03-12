@@ -1,57 +1,54 @@
 {
-    "name": "@secretary/aws-secrets-manager-adapter",
-    "description": "AWS SecretsManager adapter for Secretary",
-    "version": "4.0.0",
-    "repository": {
-        "type": "github",
-        "url": "https://github.com/secretary/node"
-    },
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "scripts": {
-        "build": "tsc --project tsconfig.json",
-        "lint": "eslint --fix --config=eslint.json src",
-        "test": "nyc mocha",
-        "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
-        "prepublishOnly": "npm run build"
-    },
-    "nyc": {
-        "extension": [
-            ".ts"
-        ],
-        "include": [
-            "src/**/*.ts"
-        ],
-        "exclude": [
-            "src/**/*.spec.ts"
-        ],
-        "reporter": [
-            "text"
-        ],
-        "all": true
-    },
-    "author": "Aaron Scherer <aequasi@gmail.com>",
-    "license": "MIT",
-    "publishConfig": {
-        "access": "public"
-    },
-    "dependencies": {
-        "@secretary/core": "^4.0.0"
-    },
-    "peerDependencies": {
-        "@aws-sdk/client-secrets-manager": "^3.0.0"
-    },
-    "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
-    "devDependencies": {
-        "@aws-sdk/client-secrets-manager": "^3.229.0",
-        "@types/chai-as-promised": "^7.1.5",
-        "@types/eslint": "^8.4.10",
-        "@typescript-eslint/eslint-plugin": "^5.46.1",
-        "@typescript-eslint/parser": "^5.46.1",
-        "chai-as-promised": "^7.1.1",
-        "eslint": "^8.29.0",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-import": "^2.26.0",
-        "typemoq": "^2.1.0"
-    }
+  "name": "@secretary/aws-secrets-manager-adapter",
+  "description": "AWS SecretsManager adapter for Secretary",
+  "version": "4.0.0",
+  "author": "Aaron Scherer <aequasi@gmail.com>",
+  "dependencies": {
+    "@secretary/core": "4.0.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-secrets-manager": "3.229.0",
+    "@types/chai-as-promised": "7.1.5",
+    "@types/eslint": "8.4.10",
+    "@typescript-eslint/eslint-plugin": "5.46.1",
+    "@typescript-eslint/parser": "5.46.1",
+    "chai-as-promised": "7.1.1",
+    "eslint": "8.29.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "typemoq": "2.1.0"
+  },
+  "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/**/*.spec.ts"
+    ],
+    "reporter": [
+      "text"
+    ],
+    "all": true
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-secrets-manager": "3.229.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "secretary/node",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
+    "lint": "eslint --fix --config=eslint.json src",
+    "prepublishOnly": "npm run build",
+    "test": "nyc mocha"
+  },
+  "types": "dist/index.d.ts"
 }

@@ -70,5 +70,5 @@
     "version": "oclif readme && git add README.md"
   },
   "types": "dist/index.d.ts",
-  "gitHead": "132096e6922b1633ecf6393eb83e6f6a7305978c"
+  "gitHead": "85e242676c48778f9647d1e76198fd8aea4e04a3"
 }

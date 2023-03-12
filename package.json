@@ -31,7 +31,7 @@
     "ms-rest-azure": "3.0.2",
     "node-vault": "0.9.9",
     "nodecredstash": "3.0.0",
-    "nx": "15.3.3",
+    "nx": "15.8",
     "nyc": "15.1.0",
     "sinon": "15.0.1",
     "sinon-chai": "3.3.0",
@@ -48,7 +48,8 @@
     "core": "lerna run build --scope=@secretary/core",
     "lint": "nx run-many --target=lint",
     "prepare": "nx build @secretary/core",
-    "prepublishOnly": "npm run lint && npm run test && npm run build",
+    "prepublishOnly": "yarn preversion",
+    "preversion": "nx run-many --targets=lint,test,build",
     "test": "nx run-many --target=test"
   },
   "workspaces": [

@@ -5,12 +5,14 @@ import {AbstractAdapter, Manager} from '@secretary/core';
 import execa from 'execa';
 import * as yup from 'yup';
 
+type SecretCallback = (value?: string) => string | undefined;
+
 interface Secret {
     name: string;
     secret: string;
     property: string;
     source: keyof SecretaryConfig['sources'];
-    callback(value: string): string;
+    callback: SecretCallback
 }
 
 const configSchema = yup.lazy((wholeValue: SecretaryConfig) => yup.object({
@@ -22,7 +24,7 @@ const configSchema = yup.lazy((wholeValue: SecretaryConfig) => yup.object({
         source:   yup.lazy(() => (
             yup.string().oneOf(Object.keys(wholeValue.sources))
         )),
-        callback: yup.mixed((input): input is Function => typeof input === 'function')
+        callback: yup.mixed((input): input is SecretCallback => typeof input === 'function'),
     })).defined(),
 }));
 
@@ -81,11 +83,7 @@ export default class Inject extends Command {
         for (const secretConfig of this.secretaryConfig.secrets) {
             // eslint-disable-next-line no-await-in-loop
             const secret = await this.manager.getSecret<Record<string, string>>(secretConfig.secret, secretConfig.source);
-            if (typeof secretConfig.callback === 'function') {
-                newEnv[secretConfig.name] = secretConfig.callback(secret.value?.[secretConfig.property]);
-            } else {
-                newEnv[secretConfig.name] = secret.value?.[secretConfig.property];
-            }
+            newEnv[secretConfig.name] = typeof secretConfig.callback === 'function' ? secretConfig.callback(secret.value?.[secretConfig.property]) : secret.value?.[secretConfig.property];
         }
 
         const exec = execa(argv.shift() as string, argv, {env: newEnv});

@@ -1,10 +1,10 @@
 {
   "name": "@secretary/azure-key-vault-adapter",
   "description": "Azure Key Vault adapter for Secretary",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "author": "Aaron Scherer <aequasi@gmail.com>",
   "dependencies": {
-    "@secretary/core": "^4.0.4",
+    "@secretary/core": "^4.0.5",
     "azure-keyvault": "3.0.4",
     "ms-rest-azure": "3.0.2"
   },
@@ -19,7 +19,7 @@
     "eslint-plugin-import": "2.26.0",
     "typemoq": "2.1.0"
   },
-  "gitHead": "1a22d1f11bd050b501dd3974228caace9f092e1e",
+  "gitHead": "7add094b62607294c9426f210a7d9b274ab4133b",
   "license": "MIT",
   "main": "dist/index.js",
   "nyc": {

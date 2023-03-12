@@ -1,7 +1,7 @@
 {
   "name": "@secretary/cli",
   "description": "Secretary CLI",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "author": "Secretary",
   "bin": {
     "secretary": "./bin/run"
@@ -10,7 +10,7 @@
   "dependencies": {
     "@oclif/core": "1.21.0",
     "@oclif/plugin-help": "5",
-    "@secretary/core": "^4.0.4",
+    "@secretary/core": "^4.0.5",
     "execa": "5",
     "yup": "1.0.0-beta.8"
   },
@@ -69,5 +69,6 @@
     "test": "mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
-  "types": "dist/index.d.ts"
+  "types": "dist/index.d.ts",
+  "gitHead": "7add094b62607294c9426f210a7d9b274ab4133b"
 }

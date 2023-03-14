@@ -16,7 +16,7 @@ $ npm install -g @secretary/cli
 $ secretary COMMAND
 running command...
 $ secretary (--version)
-@secretary/cli/4.1.1 linux-x64 node-v18.12.1
+@secretary/cli/4.2.1 linux-x64 node-v18.12.1
 $ secretary --help [COMMAND]
 USAGE
   $ secretary COMMAND
@@ -73,5 +73,5 @@ EXAMPLES
   // output from yarn build
 ```
 
-_See code: [dist/commands/inject/index.ts](https://github.com/secretary/node/blob/v4.1.1/dist/commands/inject/index.ts)_
+_See code: [dist/commands/inject/index.ts](https://github.com/secretary/node/blob/v4.2.1/dist/commands/inject/index.ts)_
 <!-- commandsstop -->

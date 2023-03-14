@@ -1,5 +1,5 @@
 import {
-    CreateSecretRequest,
+    CreateSecretRequest, DeleteSecretRequest,
     GetSecretValueRequest,
     SecretsManager,
     UpdateSecretRequest,
@@ -12,6 +12,8 @@ export interface GetSecretOptions {
 }
 
 export type PutSecretOptions = UpdateSecretRequest & CreateSecretRequest;
+
+export type DeleteSecretOptions = DeleteSecretRequest;
 
 export default class Adapter extends AbstractAdapter {
     public constructor(private readonly client: SecretsManager) {
@@ -84,7 +86,7 @@ export default class Adapter extends AbstractAdapter {
 
     public async deleteSecret<V extends SecretValueType = SecretValueType>(
         secret: Secret<V>,
-        options: OptionsInterface = {},
+        options: Omit<DeleteSecretOptions, 'SecretId'> = {},
     ): Promise<void> {
         try {
             await this.client.deleteSecret({...options, SecretId: secret.key});

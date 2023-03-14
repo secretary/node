@@ -59,10 +59,10 @@ export default class Manager {
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async getSecret<V extends SecretValueType = SecretValueType>(
+    public async getSecret<V extends SecretValueType = SecretValueType, AdapterType extends AbstractAdapter = AbstractAdapter>(
         key: string,
         source = 'default',
-        options?: OptionsInterface,
+        options?: Parameters<AdapterType['getSecret']>[1],
     ): Promise<Secret<V>> {
         return this.adapters[source].getSecret<V>(key, options);
     }
@@ -80,10 +80,10 @@ export default class Manager {
      * @param {OptionsInterface} options
      * @return {Promise<Secret>}
      */
-    public async putSecret<V extends SecretValueType = SecretValueType>(
+    public async putSecret<V extends SecretValueType = SecretValueType, AdapterType extends AbstractAdapter = AbstractAdapter>(
         secret: Secret<V>,
         source = 'default',
-        options?: OptionsInterface,
+        options?: Parameters<AdapterType['putSecret']>[1],
     ): Promise<Secret<V>> {
         return this.adapters[source].putSecret<V>(secret, options);
     }
@@ -101,10 +101,10 @@ export default class Manager {
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecret<V extends SecretValueType = SecretValueType>(
+    public async deleteSecret<V extends SecretValueType = SecretValueType, AdapterType extends AbstractAdapter = AbstractAdapter>(
         secret: Secret<V>,
         source = 'default',
-        options?: OptionsInterface,
+        options?: Parameters<AdapterType['deleteSecret']>[1],
     ): Promise<void> {
         return this.adapters[source].deleteSecret(secret, options);
     }
@@ -122,7 +122,7 @@ export default class Manager {
      * @param {OptionsInterface} options
      * @return {Promise<void>}
      */
-    public async deleteSecretByKey(key: string, source = 'default', options?: OptionsInterface): Promise<void> {
+    public async deleteSecretByKey<AdapterType extends AbstractAdapter = AbstractAdapter>(key: string, source = 'default', options?: Parameters<AdapterType['deleteSecret']>[1]): Promise<void> {
         const secret = await this.getSecret(key, source, options);
 
         return this.adapters[source].deleteSecret(secret, options);

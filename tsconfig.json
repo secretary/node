@@ -4,6 +4,9 @@
         "node_modules",
         "**/*.spec.ts"
     ],
+    "include": [
+        "packages"
+    ],
     "compilerOptions": {
         "target":                       "es2017",
         "module":                       "commonjs",
@@ -13,6 +16,7 @@
         "declaration":                  true,
         "sourceMap":                    true,
         "noImplicitAny":                false,
+        "allowJs":                      true,
         "outDir":                       "dist/",
         "lib":                          [
             "es2017"

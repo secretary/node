@@ -98,7 +98,7 @@ export default class Inject extends Command {
     }
 
     private async getConfig(configFile: string): Promise<SecretaryConfig> {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const configFn = await import(configFile).then((x: any) => x.default ?? x) as ConfigFileContent;
         if (typeof configFn !== 'function') {
             return this.validateConfig(configFn);

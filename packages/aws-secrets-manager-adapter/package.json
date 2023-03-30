@@ -1,7 +1,7 @@
 {
   "name": "@secretary/aws-secrets-manager-adapter",
   "description": "AWS SecretsManager adapter for Secretary",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "author": "Aaron Scherer <aequasi@gmail.com>",
   "dependencies": {
     "@secretary/core": "^4.2.1"

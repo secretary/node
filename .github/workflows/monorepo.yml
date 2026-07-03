@@ -23,27 +23,29 @@ jobs:
     install-dependencies:
         runs-on: ${{ matrix.os }}
         strategy:
+            fail-fast: false
             matrix:
                 os:
                     - ubuntu-latest
                     - macos-latest
                     - windows-latest
                 node_version:
-                    - 14
-                    - 16
-                    - 18
-                    - 19
-                    - 20hashhas
+                    - 20
+                    - 22
+                    - 24
+                    - 26
                 architecture:
                     - x64
         name: Node ${{ matrix.node_version }} - ${{ matrix.architecture }} on ${{ matrix.os }}
         steps:
-            -   uses: actions/checkout@v3
-            -   uses: actions/setup-node@v3
+            -   uses: actions/checkout@v4
+            -   run: corepack enable
+            -   uses: actions/setup-node@v4
                 with:
-                    node-version: '18'
+                    node-version: ${{ matrix.node_version }}
+                    architecture: ${{ matrix.architecture }}
                     cache: 'yarn'
-            -   run: yarn install
+            -   run: yarn install --immutable
             -   name: Run Build
                 run: yarn build
             -   name: Run Lint
@@ -56,15 +58,16 @@ jobs:
         if: github.event_name == 'pull_request'
         steps:
             -   name: Checkout Branch
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
-            -   uses: actions/setup-node@v3
+            -   run: corepack enable
+            -   uses: actions/setup-node@v4
                 with:
-                    node-version-file: 'package.json'
+                    node-version: '24'
                     cache: 'yarn'
             -   name: Install Dependencies
-                run: yarn install --frozen-lockfile
+                run: yarn install --immutable
             -   name: Run Build
                 run: yarn build
             -   name: Run Lint

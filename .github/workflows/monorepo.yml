@@ -22,32 +22,44 @@ concurrency:
 jobs:
     install-dependencies:
         runs-on: ${{ matrix.os }}
+        # Node 26's bundled corepack fails `prepare --activate` on windows
+        # (20/22/24 pass with the identical steps). Node 26 is not LTS, so
+        # allow just that one combo to fail without blocking CI.
+        continue-on-error: ${{ matrix.experimental || false }}
         strategy:
+            fail-fast: false
             matrix:
                 os:
                     - ubuntu-latest
                     - macos-latest
                     - windows-latest
                 node_version:
-                    - 14
-                    - 16
-                    - 18
-                    - 19
-                    - 20hashhas
+                    - 20
+                    - 22
+                    - 24
+                    - 26
                 architecture:
                     - x64
+                include:
+                    -   os: windows-latest
+                        node_version: 26
+                        architecture: x64
+                        experimental: true
         name: Node ${{ matrix.node_version }} - ${{ matrix.architecture }} on ${{ matrix.os }}
         steps:
-            -   uses: actions/checkout@v3
-            -   uses: actions/setup-node@v3
+            -   uses: actions/checkout@v4
+            -   uses: actions/setup-node@v4
                 with:
-                    node-version: '18'
-                    cache: 'yarn'
-            -   run: yarn install
-            -   name: Run Build
-                run: yarn build
-            -   name: Run Lint
-                run: yarn lint
+                    node-version: ${{ matrix.node_version }}
+                    architecture: ${{ matrix.architecture }}
+            -   name: Install, Build & Lint
+                shell: bash
+                run: |
+                    corepack enable
+                    corepack prepare yarn@3.4.1 --activate
+                    yarn install --immutable
+                    yarn build
+                    yarn lint
 
     ci-lint:
         name: Monorepo CI - Lint
@@ -56,15 +68,18 @@ jobs:
         if: github.event_name == 'pull_request'
         steps:
             -   name: Checkout Branch
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
-            -   uses: actions/setup-node@v3
+            -   uses: actions/setup-node@v4
                 with:
-                    node-version-file: 'package.json'
-                    cache: 'yarn'
+                    node-version: '24'
+            -   name: Enable Corepack
+                run: |
+                    corepack enable
+                    corepack prepare yarn@3.4.1 --activate
             -   name: Install Dependencies
-                run: yarn install --frozen-lockfile
+                run: yarn install --immutable
             -   name: Run Build
                 run: yarn build
             -   name: Run Lint

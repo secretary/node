@@ -43,15 +43,14 @@ jobs:
                 with:
                     node-version: ${{ matrix.node_version }}
                     architecture: ${{ matrix.architecture }}
-            -   name: Enable Corepack
+            -   name: Install, Build & Lint
+                shell: bash
                 run: |
                     corepack enable
                     corepack prepare yarn@3.4.1 --activate
-            -   run: yarn install --immutable
-            -   name: Run Build
-                run: yarn build
-            -   name: Run Lint
-                run: yarn lint
+                    yarn install --immutable
+                    yarn build
+                    yarn lint
 
     ci-lint:
         name: Monorepo CI - Lint

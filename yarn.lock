@@ -292,6 +292,52 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aws-sdk/client-ssm@npm:3.229.0":
+  version: 3.229.0
+  resolution: "@aws-sdk/client-ssm@npm:3.229.0"
+  dependencies:
+    "@aws-crypto/sha256-browser": 2.0.0
+    "@aws-crypto/sha256-js": 2.0.0
+    "@aws-sdk/client-sts": 3.229.0
+    "@aws-sdk/config-resolver": 3.226.0
+    "@aws-sdk/credential-provider-node": 3.229.0
+    "@aws-sdk/fetch-http-handler": 3.226.0
+    "@aws-sdk/hash-node": 3.226.0
+    "@aws-sdk/invalid-dependency": 3.226.0
+    "@aws-sdk/middleware-content-length": 3.226.0
+    "@aws-sdk/middleware-endpoint": 3.226.0
+    "@aws-sdk/middleware-host-header": 3.226.0
+    "@aws-sdk/middleware-logger": 3.226.0
+    "@aws-sdk/middleware-recursion-detection": 3.226.0
+    "@aws-sdk/middleware-retry": 3.229.0
+    "@aws-sdk/middleware-serde": 3.226.0
+    "@aws-sdk/middleware-signing": 3.226.0
+    "@aws-sdk/middleware-stack": 3.226.0
+    "@aws-sdk/middleware-user-agent": 3.226.0
+    "@aws-sdk/node-config-provider": 3.226.0
+    "@aws-sdk/node-http-handler": 3.226.0
+    "@aws-sdk/protocol-http": 3.226.0
+    "@aws-sdk/smithy-client": 3.226.0
+    "@aws-sdk/types": 3.226.0
+    "@aws-sdk/url-parser": 3.226.0
+    "@aws-sdk/util-base64": 3.208.0
+    "@aws-sdk/util-body-length-browser": 3.188.0
+    "@aws-sdk/util-body-length-node": 3.208.0
+    "@aws-sdk/util-defaults-mode-browser": 3.226.0
+    "@aws-sdk/util-defaults-mode-node": 3.226.0
+    "@aws-sdk/util-endpoints": 3.226.0
+    "@aws-sdk/util-retry": 3.229.0
+    "@aws-sdk/util-user-agent-browser": 3.226.0
+    "@aws-sdk/util-user-agent-node": 3.226.0
+    "@aws-sdk/util-utf8-browser": 3.188.0
+    "@aws-sdk/util-utf8-node": 3.208.0
+    "@aws-sdk/util-waiter": 3.226.0
+    tslib: ^2.3.1
+    uuid: ^8.3.2
+  checksum: 4c13f3072c1504a29489a35bfed8f65a03695396da547792c3a952bbfacaf2cd0cb7a7670f0b79d9ccc19c603ba15e4fecfa35f8ee54949464ece3dd1880502b
+  languageName: node
+  linkType: hard
+
 "@aws-sdk/client-sso-oidc@npm:3.229.0":
   version: 3.229.0
   resolution: "@aws-sdk/client-sso-oidc@npm:3.229.0"
@@ -1703,6 +1749,17 @@ __metadata:
     "@aws-sdk/util-buffer-from": 3.208.0
     tslib: ^2.3.1
   checksum: e5dfe7565f2de32245a544d1d715d803025bc5522538c0206fa61377f747804d95fc2e5e25976144bb63a6857e360b4286d101e730ab5d39866c60383a47e7d5
+  languageName: node
+  linkType: hard
+
+"@aws-sdk/util-waiter@npm:3.226.0":
+  version: 3.226.0
+  resolution: "@aws-sdk/util-waiter@npm:3.226.0"
+  dependencies:
+    "@aws-sdk/abort-controller": 3.226.0
+    "@aws-sdk/types": 3.226.0
+    tslib: ^2.3.1
+  checksum: d182033937bd5ab024598a48ad28030267c1b9aa54175f24d0e57ea87975a0a07b5da7d0e5f43efb663e908a5df591dfa307bf9707a02d84eb49b089e9c5a5db
   languageName: node
   linkType: hard
 
@@ -3860,7 +3917,27 @@ __metadata:
     eslint-plugin-import: 2.26.0
     typemoq: 2.1.0
   peerDependencies:
-    "@aws-sdk/client-secrets-manager": 3.229.0
+    "@aws-sdk/client-secrets-manager": ^3.229.0
+  languageName: unknown
+  linkType: soft
+
+"@secretary/aws-ssm-parameter-store-adapter@workspace:packages/aws-ssm-parameter-store-adapter":
+  version: 0.0.0-use.local
+  resolution: "@secretary/aws-ssm-parameter-store-adapter@workspace:packages/aws-ssm-parameter-store-adapter"
+  dependencies:
+    "@aws-sdk/client-ssm": 3.229.0
+    "@secretary/core": ^4.2.1
+    "@types/chai-as-promised": 7.1.5
+    "@types/eslint": 8.4.10
+    "@typescript-eslint/eslint-plugin": 5.46.1
+    "@typescript-eslint/parser": 5.46.1
+    chai-as-promised: 7.1.1
+    eslint: 8.29.0
+    eslint-config-prettier: 8.5.0
+    eslint-plugin-import: 2.26.0
+    typemoq: 2.1.0
+  peerDependencies:
+    "@aws-sdk/client-ssm": ^3.229.0
   languageName: unknown
   linkType: soft
 

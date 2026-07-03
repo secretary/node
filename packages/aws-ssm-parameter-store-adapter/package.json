@@ -1,0 +1,53 @@
+{
+  "name": "@secretary/aws-ssm-parameter-store-adapter",
+  "description": "AWS SSM Parameter Store adapter for Secretary",
+  "version": "4.2.2",
+  "author": "Aaron Scherer <aequasi@gmail.com>",
+  "dependencies": {
+    "@secretary/core": "^4.2.1"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-ssm": "3.229.0",
+    "@types/chai-as-promised": "7.1.5",
+    "@types/eslint": "8.4.10",
+    "@typescript-eslint/eslint-plugin": "5.46.1",
+    "@typescript-eslint/parser": "5.46.1",
+    "chai-as-promised": "7.1.1",
+    "eslint": "8.29.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "typemoq": "2.1.0"
+  },
+  "license": "MIT",
+  "main": "dist/index.js",
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/**/*.spec.ts"
+    ],
+    "reporter": [
+      "text"
+    ],
+    "all": true
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-ssm": "^3.229.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "secretary/node",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx codecov",
+    "lint": "eslint --fix --config=eslint.json src",
+    "prepublishOnly": "npm run build",
+    "test": "nyc mocha"
+  },
+  "types": "dist/index.d.ts"
+}

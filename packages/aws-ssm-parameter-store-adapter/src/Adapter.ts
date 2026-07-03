@@ -28,7 +28,7 @@ export default class Adapter extends AbstractAdapter {
 
         try {
             const data = await this.client.getParameter(params);
-            const value = data.Parameter?.Value ;
+            const value = data.Parameter?.Value;
 
             let secretValue: V = value as V;
             try {

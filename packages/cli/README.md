@@ -16,7 +16,7 @@ $ npm install -g @secretary/cli
 $ secretary COMMAND
 running command...
 $ secretary (--version)
-@secretary/cli/4.2.1 linux-x64 node-v18.12.1
+@secretary/cli/4.2.3 linux-x64 node-v24.15.0
 $ secretary --help [COMMAND]
 USAGE
   $ secretary COMMAND
@@ -27,19 +27,19 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`secretary help [COMMANDS]`](#secretary-help-commands)
+* [`secretary help [COMMAND]`](#secretary-help-command)
 * [`secretary inject COMMAND`](#secretary-inject-command)
 
-## `secretary help [COMMANDS]`
+## `secretary help [COMMAND]`
 
 Display help for secretary.
 
 ```
 USAGE
-  $ secretary help [COMMANDS] [-n]
+  $ secretary help [COMMAND...] [-n]
 
 ARGUMENTS
-  COMMANDS  Command to show help for.
+  [COMMAND...]  Command to show help for.
 
 FLAGS
   -n, --nested-commands  Include all nested commands in the output.
@@ -48,7 +48,7 @@ DESCRIPTION
   Display help for secretary.
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.2.8/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/6.2.53/src/commands/help.ts)_
 
 ## `secretary inject COMMAND`
 
@@ -56,14 +56,14 @@ Inject secrets into the environment of the given command
 
 ```
 USAGE
-  $ secretary inject COMMAND [-c <value>]
+  $ secretary inject COMMAND... [-c <value>]
 
 ARGUMENTS
-  COMMAND  Command to run
+  COMMAND...  Command to run
 
 FLAGS
-  -c, --config=<value>  [default: /home/aequasi/projects/secretary/node/packages/cli/.secretaryrc.js] SecretaryConfig
-                        file to read mapping from
+  -c, --config=<value>  [default: /home/aaron/projects/secretary/node/packages/cli/.secretaryrc.js] SecretaryConfig file
+                        to read mapping from
 
 DESCRIPTION
   Inject secrets into the environment of the given command
@@ -73,5 +73,5 @@ EXAMPLES
   // output from yarn build
 ```
 
-_See code: [dist/commands/inject/index.ts](https://github.com/secretary/node/blob/v4.2.1/dist/commands/inject/index.ts)_
+_See code: [src/commands/inject/index.ts](https://github.com/secretary/node/blob/v4.2.3/src/commands/inject/index.ts)_
 <!-- commandsstop -->

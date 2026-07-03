@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import {Command, Config, Flags} from '@oclif/core';
+import {Args, Command, Config, Flags} from '@oclif/core';
 import {AbstractAdapter, Manager} from '@secretary/core';
 import execa from 'execa';
 import * as yup from 'yup';
@@ -52,7 +52,9 @@ export default class Inject extends Command {
         }),
     };
 
-    public static args = [{name: 'command', description: 'Command to run', required: true}];
+    public static args = {
+        command: Args.string({description: 'Command to run', required: true}),
+    };
 
     public static strict = false;
 
@@ -67,8 +69,9 @@ export default class Inject extends Command {
 
     public async run(): Promise<void> {
         const {argv, flags} = await this.parse(Inject);
+        const commandArgs = argv as string[];
 
-        if (!argv[0]) {
+        if (!commandArgs[0]) {
             this.error('You must pass a command to this script');
 
             return this.exit(255);
@@ -86,7 +89,7 @@ export default class Inject extends Command {
             newEnv[secretConfig.name] = typeof secretConfig.callback === 'function' ? secretConfig.callback(secret.value?.[secretConfig.property]) : secret.value?.[secretConfig.property];
         }
 
-        const exec = execa(argv.shift() as string, argv, {env: newEnv});
+        const exec = execa(commandArgs.shift() as string, commandArgs, {env: newEnv});
 
         exec.stdout?.pipe(process.stdout);
         exec.stderr?.pipe(process.stderr);

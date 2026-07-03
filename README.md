@@ -13,6 +13,7 @@ Secretary (etymology: Keeper of secrets) provides an abstract way to manage secr
 Currently supports the following adapters:
 
 * [AWS Secrets Manager](https://github.com/secretary/node/tree/master/packages/aws-secrets-manager-adapter)
+* [AWS SSM Parameter Store](https://github.com/secretary/node/tree/master/packages/aws-ssm-parameter-store-adapter)
 * [Azure Key Vault](https://github.com/secretary/node/tree/master/packages/azure-key-vault-adapter)
 * [Hashicorp Vault](https://github.com/secretary/node/tree/master/packages/hashicorp-vault-adater)
 * [JSON File](https://github.com/secretary/node/tree/master/packages/json-file-adapter)

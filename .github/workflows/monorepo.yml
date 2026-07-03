@@ -22,6 +22,10 @@ concurrency:
 jobs:
     install-dependencies:
         runs-on: ${{ matrix.os }}
+        # Node 26's bundled corepack fails `prepare --activate` on windows
+        # (20/22/24 pass with the identical steps). Node 26 is not LTS, so
+        # allow just that one combo to fail without blocking CI.
+        continue-on-error: ${{ matrix.experimental || false }}
         strategy:
             fail-fast: false
             matrix:
@@ -36,6 +40,11 @@ jobs:
                     - 26
                 architecture:
                     - x64
+                include:
+                    -   os: windows-latest
+                        node_version: 26
+                        architecture: x64
+                        experimental: true
         name: Node ${{ matrix.node_version }} - ${{ matrix.architecture }} on ${{ matrix.os }}
         steps:
             -   uses: actions/checkout@v4
